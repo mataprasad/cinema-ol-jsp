@@ -18,74 +18,74 @@ import com.app.util.Constant;
 import com.google.gson.Gson;
 
 public class BaseController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private Gson gson = new Gson();
-	public DbConfigHelper _dbConfig = null;
 
-	public BaseController() {
+    private static final long serialVersionUID = 1L;
+    private Gson gson = new Gson();
+    public DbConfigHelper _dbConfig = null;
 
-		super();
-	}
+    public BaseController() {
 
-	public void populate(Object obj, HttpServletRequest request) {
+        super();
+    }
 
-		try {
-			BeanUtils.populate(obj, request.getParameterMap());
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-	}
+    public void populate(Object obj, HttpServletRequest request) {
+        try {
+            BeanUtils.populate(obj, request.getParameterMap());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public Object populateJson(Type t, HttpServletRequest request) throws IOException {
+    public Object populateJson(Type t, HttpServletRequest request) throws IOException {
 
-		String body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-		Object obj = gson.fromJson(body, t);
-		return obj;
-	}
+        String body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+        Object obj = gson.fromJson(body, t);
+        return obj;
+    }
 
-	public void view(String viewPath, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    public void view(String viewPath, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		request.getRequestDispatcher(Constant.VIEW_BASE_PATH + viewPath).forward(request, response);
-	}
+        request.getRequestDispatcher(Constant.VIEW_BASE_PATH + viewPath).forward(request, response);
+    }
 
-	public void json(Object data, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    public void json(Object data, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		response.setContentType(Constant.CONTENT_TYPE_JSON);
+        response.setContentType(Constant.CONTENT_TYPE_JSON);
 
-		response.getWriter().append(gson.toJson(data));
-	}
+        response.getWriter().append(gson.toJson(data));
+    }
 
-	public String getAppSettings(String key) {
+    public String getAppSettings(String key) {
 
-		return getServletContext().getInitParameter(key);
-	}
+        return getServletContext().getInitParameter(key);
+    }
 
-	public DbConfigHelper InitDbConfig() {
+    public DbConfigHelper InitDbConfig() {
 
-		DbConfigHelper dbConfig = new DbConfigHelper(this.getAppSettings(Constant.CONFIG_KEY_DB_DRIVER),
-				this.getAppSettings(Constant.CONFIG_KEY_DB_HOST), this.getAppSettings(Constant.CONFIG_KEY_DB_PORT),
-				this.getAppSettings(Constant.CONFIG_KEY_DB_NAME), this.getAppSettings(Constant.CONFIG_KEY_DB_USER),
-				this.getAppSettings(Constant.CONFIG_KEY_DB_PASSWORD), this.getAppSettings(Constant.CONFIG_KEY_DB_TYPE));
+        DbConfigHelper dbConfig = new DbConfigHelper(this.getAppSettings(Constant.CONFIG_KEY_DB_DRIVER),
+                this.getAppSettings(Constant.CONFIG_KEY_DB_HOST), this.getAppSettings(Constant.CONFIG_KEY_DB_PORT),
+                this.getAppSettings(Constant.CONFIG_KEY_DB_NAME), this.getAppSettings(Constant.CONFIG_KEY_DB_USER),
+                this.getAppSettings(Constant.CONFIG_KEY_DB_PASSWORD), this.getAppSettings(Constant.CONFIG_KEY_DB_TYPE));
 
-		return dbConfig;
-	}
+        return dbConfig;
+    }
 
-	public String getAction(HttpServletRequest request) {
+    public String getAction(HttpServletRequest request) {
 
-		String paramDo = request.getParameter("do");
-		if (paramDo == null || paramDo.trim() == "") {
-			return "";
-		}
+        String paramDo = request.getParameter("do");
+        if (paramDo == null || paramDo.trim() == "") {
+            return "";
+        }
 
-		return paramDo;
-	}
+        return paramDo;
+    }
 
-	public UserInfo getLoggedUser(HttpServletRequest request) {
-		UserInfo userInfo = (UserInfo) request.getSession().getAttribute(Constant.SessionKeys.USER_INFO);
-		return userInfo;
-	}
+    public UserInfo getLoggedUser(HttpServletRequest request) {
+        UserInfo userInfo = (UserInfo) request.getSession().getAttribute(Constant.SessionKeys.USER_INFO);
+        return userInfo;
+    }
 }

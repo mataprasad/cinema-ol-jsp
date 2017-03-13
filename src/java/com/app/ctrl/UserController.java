@@ -9,27 +9,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.app.bean.db.UserInfo;
-import com.app.bean.vm.VMBookTicket;
 import com.app.bean.vm.VMBookingHistory;
 import com.app.bean.vm.VMPwdReset;
 import com.app.biz.CommonService;
 import com.app.biz.UserService;
 import com.app.framework.web.BaseController;
 import com.app.util.Constant;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @WebServlet("/user")
 public class UserController extends BaseController {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         this._dbConfig = this.InitDbConfig();
         String action = this.getAction(request);
-        
+
         switch (action) {
             case "":
             case "home":
@@ -68,33 +65,34 @@ public class UserController extends BaseController {
                 break;
         }
     }
-    
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         this._dbConfig = this.InitDbConfig();
         String action = this.getAction(request);
-        
+
         switch (action) {
             case "edit":
                 UserInfo objUserInfo = new UserInfo();
                 this.populate(objUserInfo, request);
-                
-                UserInfo loggedUserInSession = (UserInfo) request.getSession().getAttribute(Constant.SessionKeys.USER_INFO);
+
+                /*UserInfo loggedUserInSession = (UserInfo) request.getSession().getAttribute(Constant.SessionKeys.USER_INFO);
                 objUserInfo.setUser_LoginName(loggedUserInSession.getUser_LoginName());
-                objUserInfo.setUser_LoginPassword(loggedUserInSession.getUser_LoginPassword());
-                
+                objUserInfo.setUser_LoginPassword(loggedUserInSession.getUser_LoginPassword());*/
+                this.json(objUserInfo, request, response);
+
                 break;
             case "change-pwd":
                 UserInfo loggedUser = (UserInfo) request.getSession().getAttribute(Constant.SessionKeys.USER_INFO);
                 if (loggedUser != null) {
                     VMPwdReset obj = new VMPwdReset();
                     this.populate(obj, request);
-                    
+
                     if (loggedUser.getUser_LoginPassword().equals(obj.getTxtCurrentPass().trim())) {
                         loggedUser.setUser_LoginPassword(obj.getTxtNewRePass().trim());
-                        
+
                         UserService userService = new UserService(this._dbConfig);
-                        
+
                         try {
                             if (userService.changePassword(loggedUser)) {
                                 request.setAttribute(Constant.TempDataKeys.MSG, "Password Changed Successfully.");
@@ -106,7 +104,7 @@ public class UserController extends BaseController {
                             this.json(ex, request, response);
                             return;
                         }
-                        
+
                     } else {
                         request.setAttribute(Constant.TempDataKeys.MSG, "Current password is not correct !");
                     }
@@ -119,9 +117,9 @@ public class UserController extends BaseController {
             default:
                 break;
         }
-        
+
     }
-    
+
     private void BookingHistory(HttpServletRequest request, HttpServletResponse response, boolean forAjax)
             throws ServletException, IOException {
         String oPage = request.getParameter(Constant.RequestParams.PAGE);
