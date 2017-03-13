@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>MvcTest</display-name>
+	<context-param>
+		<description>Db Type</description>
+		<param-name>db-type</param-name>
+		<param-value>SQL</param-value>
+	</context-param>
+	<context-param>
+		<description>Db Driver</description>
+		<param-name>db-driver</param-name>
+		<param-value>com.microsoft.sqlserver.jdbc.SQLServerDriver</param-value>
+	</context-param>
+	<context-param>
+		<description>Db Host</description>
+		<param-name>db-host</param-name>
+		<param-value>LAP0000082\\SQLEXPRESS</param-value>
+	</context-param>
+	<context-param>
+		<description>Db Port</description>
+		<param-name>db-port</param-name>
+		<param-value>59619</param-value>
+	</context-param>
+	<context-param>
+		<description>Db UserId</description>
+		<param-name>db-user-id</param-name>
+		<param-value>saa</param-value>
+	</context-param>
+	<context-param>
+		<description>Db Password</description>
+		<param-name>db-password</param-name>
+		<param-value>Sap@10451</param-value>
+	</context-param>
+	<context-param>
+		<description>Db DatabaseName</description>
+		<param-name>db-name</param-name>
+		<param-value>databaseName=DbScottServer</param-value>
+	</context-param>
+	<context-param>
+		<description>Location to store uploaded file</description>
+		<param-name>file-upload</param-name>
+		<param-value>c:\apache-tomcat-5.5.29\webapps\data\</param-value>
+	</context-param>
+	<servlet>
+		<servlet-name>SimpleCaptcha</servlet-name>
+		<servlet-class>nl.captcha.servlet.SimpleCaptchaServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SimpleCaptcha</servlet-name>
+		<url-pattern>/public/captcha.jpg</url-pattern>
+	</servlet-mapping>
+	<!--<filter>
+		<filter-name>f1</filter-name>
+		<filter-class>com.app.framework.web.AuthorizeFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>f1</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>-->
+	<welcome-file-list>
+		<welcome-file>/home</welcome-file>
+	</welcome-file-list>
+</web-app>
