@@ -3,6 +3,7 @@ package com.app.biz;
 import java.util.List;
 
 import com.app.bean.db.UserInfo;
+import com.app.bean.vm.VMBookTicket;
 import com.app.bean.vm.VMBookingHistory;
 import com.app.bean.vm.VMLogin;
 import com.app.bean.vm.VMRegister;
@@ -33,5 +34,13 @@ public class UserService {
             throw new Exception(Constant.ErrorMessages.USER_ALREADY_EXITS);
         }
         return this.dbUser.registerUser(obj);
+    }
+
+    public boolean changePassword(UserInfo obj) throws Exception {
+        return this.dbUser.changePassword(obj);
+    }
+
+    public VMBookTicket getBookingDetails(long id) throws Exception {
+        return this.dbUser.getBookingDetails(id);
     }
 }

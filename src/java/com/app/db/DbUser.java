@@ -10,6 +10,8 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.app.bean.db.UserInfo;
+import com.app.bean.json.SelectListItem;
+import com.app.bean.vm.VMBookTicket;
 import com.app.bean.vm.VMBookingHistory;
 import com.app.bean.vm.VMLogin;
 import com.app.bean.vm.VMRegister;
@@ -123,5 +125,51 @@ public class DbUser {
         } catch (Exception ex) {
             throw ex;
         }
+    }
+
+    public boolean changePassword(UserInfo obj) throws Exception {
+        try {
+
+            String sql = "update UserInfo set User_LoginPassword=? where User_Id=?;";
+
+            DataSource dataSource = new com.app.db.DataSource(this.dbConfig).getBds();
+
+            QueryRunner run = new QueryRunner(dataSource);
+
+            int result = run.update(sql,
+                    obj.getUser_LoginPassword(),
+                    obj.getUser_Id()
+            );
+            return result > 0;
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    public VMBookTicket getBookingDetails(long id) throws Exception {
+        VMBookTicket data = new VMBookTicket();
+        try {
+
+            DataSource dataSource = new com.app.db.DataSource(this.dbConfig).getBds();
+            QueryRunner run = new QueryRunner(dataSource, true);
+            String sqlTicketInfo = ""
+                    + "SELECT ShowInfo.Movie_Name,TicketInfo.Ticket_Id,TicketInfo.Ticket_No,TicketInfo.User_Id, "
+                    + "TicketInfo.Show_Date as 'Show_Date' ,TicketInfo.Show_Time, "
+                    + "TicketInfo.Booking_Date as 'Booking_Date' "
+                    + "FROM TicketInfo INNER JOIN ShowInfo ON "
+                    + "TicketInfo.Show_Id = ShowInfo.Show_Id where TicketInfo.Ticket_Id=?;";
+            String sqlTicketDetail="SELECT Sheat_No as text,Sheat_Cost as value,Ticket_id FROM TicketDetail where Ticket_id=?;";
+
+            ResultSetHandler<List<SelectListItem>> h = new BeanListHandler<SelectListItem>(SelectListItem.class);
+            ResultSetHandler<VMBookTicket> h1 = new BeanHandler<VMBookTicket>(VMBookTicket.class);
+
+            List<SelectListItem> deatils = run.query(sqlTicketDetail, h, id);
+            data = run.query(sqlTicketInfo, h1, id);
+            if(data!=null){
+                data.setSheats(deatils);
+            }
+        } catch (Exception e) {
+        }
+        return data;
     }
 }

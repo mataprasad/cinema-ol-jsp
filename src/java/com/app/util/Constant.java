@@ -18,6 +18,9 @@ public class Constant {
 
     public final static String VIEW_BASE_PATH = "/WEB-INF/views/";
 
+    public final static String DB_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+    public final static String TICKET_UI_DATE_FORMAT = "dd-MMM-yyyy";
+
     public final static int BOOKING_HISTORY_PAGE_SIZE = 10;
 
     public class TempDataKeys {
@@ -33,6 +36,7 @@ public class Constant {
         public final static String ERROR = "error";
         public final static String RECORDS_COUNT = "recordsCount";
         public final static String TICKET_LIST = "ticketList";
+        public final static String TICKET_DATA = "ticketData";
     }
 
     public class SessionKeys {

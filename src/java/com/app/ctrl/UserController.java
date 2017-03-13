@@ -9,23 +9,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.app.bean.db.UserInfo;
+import com.app.bean.vm.VMBookTicket;
 import com.app.bean.vm.VMBookingHistory;
+import com.app.bean.vm.VMPwdReset;
 import com.app.biz.CommonService;
 import com.app.biz.UserService;
 import com.app.framework.web.BaseController;
 import com.app.util.Constant;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet("/user")
 public class UserController extends BaseController {
-
+    
     private static final long serialVersionUID = 1L;
-
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         this._dbConfig = this.InitDbConfig();
         String action = this.getAction(request);
-
+        
         switch (action) {
             case "":
             case "home":
@@ -36,7 +40,7 @@ public class UserController extends BaseController {
                 try {
                     request.setAttribute(Constant.TempDataKeys.STATE_LIST, commonService.getAllStates());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    this.json(e, request, response);
                 }
                 this.view("user/edit.jsp", request, response);
                 break;
@@ -47,6 +51,14 @@ public class UserController extends BaseController {
                 BookingHistory(request, response, false);
                 break;
             case "booking-detail":
+                UserService userService = new UserService(this._dbConfig);
+                Double id = Double.parseDouble(request.getParameter("id"));
+                try {
+                    request.setAttribute(Constant.TempDataKeys.TICKET_DATA, userService.getBookingDetails(id.longValue()));
+                } catch (Exception ex) {
+                    //Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                    this.json(ex, request, response);
+                }
                 this.view("user/booking-detail.jsp", request, response);
                 break;
             case "history-ajax":
@@ -56,7 +68,60 @@ public class UserController extends BaseController {
                 break;
         }
     }
-
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        this._dbConfig = this.InitDbConfig();
+        String action = this.getAction(request);
+        
+        switch (action) {
+            case "edit":
+                UserInfo objUserInfo = new UserInfo();
+                this.populate(objUserInfo, request);
+                
+                UserInfo loggedUserInSession = (UserInfo) request.getSession().getAttribute(Constant.SessionKeys.USER_INFO);
+                objUserInfo.setUser_LoginName(loggedUserInSession.getUser_LoginName());
+                objUserInfo.setUser_LoginPassword(loggedUserInSession.getUser_LoginPassword());
+                
+                break;
+            case "change-pwd":
+                UserInfo loggedUser = (UserInfo) request.getSession().getAttribute(Constant.SessionKeys.USER_INFO);
+                if (loggedUser != null) {
+                    VMPwdReset obj = new VMPwdReset();
+                    this.populate(obj, request);
+                    
+                    if (loggedUser.getUser_LoginPassword().equals(obj.getTxtCurrentPass().trim())) {
+                        loggedUser.setUser_LoginPassword(obj.getTxtNewRePass().trim());
+                        
+                        UserService userService = new UserService(this._dbConfig);
+                        
+                        try {
+                            if (userService.changePassword(loggedUser)) {
+                                request.setAttribute(Constant.TempDataKeys.MSG, "Password Changed Successfully.");
+                            } else {
+                                request.setAttribute(Constant.TempDataKeys.MSG, "Oops some problems occured !");
+                            }
+                        } catch (Exception ex) {
+                            //Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                            this.json(ex, request, response);
+                            return;
+                        }
+                        
+                    } else {
+                        request.setAttribute(Constant.TempDataKeys.MSG, "Current password is not correct !");
+                    }
+                } else {
+                    this.view("public/login.jsp", request, response);
+                    return;
+                }
+                this.view("user/change-pwd.jsp", request, response);
+                break;
+            default:
+                break;
+        }
+        
+    }
+    
     private void BookingHistory(HttpServletRequest request, HttpServletResponse response, boolean forAjax)
             throws ServletException, IOException {
         String oPage = request.getParameter(Constant.RequestParams.PAGE);

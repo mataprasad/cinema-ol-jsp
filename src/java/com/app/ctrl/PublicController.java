@@ -17,6 +17,7 @@ import com.app.biz.UserService;
 import com.app.framework.web.BaseController;
 import com.app.util.Constant;
 import nl.captcha.Captcha;
+import org.apache.commons.mail.HtmlEmail;
 
 @WebServlet("/public")
 public class PublicController extends BaseController {
@@ -68,7 +69,7 @@ public class PublicController extends BaseController {
                 try {
                     request.setAttribute(Constant.TempDataKeys.STATE_LIST, commonService.getAllStates());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    this.json(e, request, response);
                 }
                 this.view("public/register.jsp", request, response);
                 break;
@@ -80,7 +81,7 @@ public class PublicController extends BaseController {
                 try {
                     request.setAttribute(Constant.TempDataKeys.MOVIE_LIST, movieService.getRunningMovies());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    this.json(e, request, response);
                 }
                 this.view("public/movie.jsp", request, response);
                 break;
@@ -89,7 +90,7 @@ public class PublicController extends BaseController {
                 try {
                     request.setAttribute(Constant.TempDataKeys.MOVIE_LIST, movieService.getUpCommingMovies());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    this.json(e, request, response);
                 }
                 this.view("public/movie-up-comming.jsp", request, response);
                 break;
@@ -115,8 +116,7 @@ public class PublicController extends BaseController {
                 try {
                     // this.fillDateList(obj, request, response);
                 } catch (Exception e) {
-
-                    e.printStackTrace();
+                    this.json(e, request, response);
                 }
                 break;
             case "login":
@@ -195,8 +195,17 @@ public class PublicController extends BaseController {
         mail += formData.getTxtViews().trim().toUpperCase();
         mail += "</td></tr></table></div></body></html>";
         try {
-            //MailGmail.SendEmail("cinemaol.asct@gmail.com", "CONCERNS/FEEDBACK", mail, "");
-            //MailGmail.SendEmail(obj.txtEmail"].Trim().ToLower(), "CinemaOL", "Thank you for visiting CinemaOl !", "");
+            HtmlEmail email = new HtmlEmail();
+            email.setHostName("smtp.gmail.com");
+            email.addTo(formData.getTxtEmail(), formData.getTxtContact());
+            email.setFrom("mataprasad045@gmail.com", "CinemaOL");
+            email.setSubject("Thank you for visiting CinemaOl !");
+            email.setAuthentication("mataprasad045@gmail.com", "");
+            email.setSSLOnConnect(true);
+            email.setSslSmtpPort("465");
+            email.setHtmlMsg(mail);
+            email.setTextMsg("Your email client does not support HTML messages");
+            email.send();
         } catch (Exception ex) {
         }
 
@@ -219,8 +228,13 @@ public class PublicController extends BaseController {
             this.loginSuccessRedirect(request, response, dataTable, isAdmin);
         } else {
             request.setAttribute(Constant.TempDataKeys.ERROR, "Invalid user name or/and password !");
-            request.setAttribute(Constant.TempDataKeys.TITLE, " ");
-            request.setAttribute(Constant.TempDataKeys.POST_URL, "public?do=login");
+            if (isAdmin) {
+                request.setAttribute(Constant.TempDataKeys.TITLE, " ADMIN");
+                request.setAttribute(Constant.TempDataKeys.POST_URL, "public?do=admin-login");
+            } else {
+                request.setAttribute(Constant.TempDataKeys.TITLE, " ");
+                request.setAttribute(Constant.TempDataKeys.POST_URL, "public?do=login");
+            }
             this.view("public/login.jsp", request, response);
         }
     }
