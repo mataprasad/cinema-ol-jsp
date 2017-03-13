@@ -27,6 +27,7 @@ public class UserController extends BaseController {
         String action = this.getAction(request);
 
         switch (action) {
+            case "":
             case "home":
                 this.view("user/index.jsp", request, response);
                 break;

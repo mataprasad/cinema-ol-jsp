@@ -32,6 +32,7 @@ public class PublicController extends BaseController {
         MovieService movieService = null;
 
         switch (action) {
+            case "home":
             case "":
                 movieService = new MovieService(this._dbConfig);
                 try {

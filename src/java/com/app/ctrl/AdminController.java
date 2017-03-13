@@ -25,8 +25,14 @@ public class AdminController extends BaseController {
             case "home":
                 this.view("admin/index.jsp", request, response);
                 break;
-            case "change-pwd":
-                this.view("user/change-pwd.jsp", request, response);
+            case "manage-show":
+                this.view("admin/manage-show.jsp", request, response);
+                break;
+            case "remove-movie":
+                this.view("admin/remove-movie.jsp", request, response);
+                break;
+            case "add-movie":
+                this.view("admin/add-movie.jsp", request, response);
                 break;
             default:
                 break;
