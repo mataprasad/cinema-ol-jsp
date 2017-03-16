@@ -49,6 +49,27 @@ public class DbUser {
         }
     }
 
+    public UserInfo getUser(String userName) throws Exception {
+        try {
+            String user_type = "USER";
+            userName = userName.trim().toLowerCase();
+
+            DataSource dataSource = new com.app.db.DataSource(this.dbConfig).getBds();
+
+            QueryRunner run = new QueryRunner(dataSource);
+
+            ResultSetHandler<UserInfo> h = new BeanHandler<UserInfo>(UserInfo.class);
+
+            UserInfo data = run.query(
+                    "select User_Id,User_LoginName,User_LoginPassword,User_Email,User_MobileNo,User_FName,User_LName,User_Add,User_City,User_State,User_SQ,User_SA,User_Type,User_IsActive from UserInfo where User_LoginName=? and User_IsActive=1 and User_Type=?;",
+                    h, userName, user_type);
+
+            return data;
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
     public List<VMBookingHistory> getBookingHistory(int userId, int pageSize, int pageNo) throws Exception {
         try {
             int min = ((pageNo - 1) * pageSize) + 1;
@@ -127,18 +148,24 @@ public class DbUser {
         }
     }
 
-    public boolean changePassword(UserInfo obj) throws Exception {
+    public boolean changePassword(UserInfo obj, boolean withUserName) throws Exception {
         try {
 
             String sql = "update UserInfo set User_LoginPassword=? where User_Id=?;";
+            String userId = "" + obj.getUser_Id();
+            
+            if (withUserName) {
+                userId = obj.getUser_LoginName();
+                sql = "update UserInfo set User_LoginPassword=? where User_LoginName=? AND user_type='USER';";
+            }
 
             DataSource dataSource = new com.app.db.DataSource(this.dbConfig).getBds();
 
-            QueryRunner run = new QueryRunner(dataSource);
+            QueryRunner run = new QueryRunner(dataSource, true);
 
             int result = run.update(sql,
                     obj.getUser_LoginPassword(),
-                    obj.getUser_Id()
+                    userId
             );
             return result > 0;
         } catch (Exception ex) {
@@ -183,7 +210,7 @@ public class DbUser {
 
             DataSource dataSource = new com.app.db.DataSource(this.dbConfig).getBds();
 
-            QueryRunner run = new QueryRunner(dataSource,true);
+            QueryRunner run = new QueryRunner(dataSource, true);
 
             int result = run.update(sql,
                     obj.getUser_Email(),

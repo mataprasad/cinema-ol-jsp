@@ -29,7 +29,11 @@ public class Constant {
         public final static String MOVIES_URLS = "moviesUrls";
         public final static String MOVIE_LIST = "movieList";
         public final static String STATE_LIST = "stateList";
+        public final static String STEP = "step";
         public final static String MSG = "msg";
+        public final static String HD_USER = "hdUser";
+        public final static String SQ = "sq";
+        public final static String SA = "sa";
         public final static String ERROR_MSG = "errorMsg";
         public final static String POST_URL = "loginPostUrl";
         public final static String TITLE = "title";

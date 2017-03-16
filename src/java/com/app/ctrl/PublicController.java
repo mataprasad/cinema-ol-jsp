@@ -16,6 +16,8 @@ import com.app.biz.MovieService;
 import com.app.biz.UserService;
 import com.app.framework.web.BaseController;
 import com.app.util.Constant;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import nl.captcha.Captcha;
 import org.apache.commons.mail.HtmlEmail;
 
@@ -74,6 +76,7 @@ public class PublicController extends BaseController {
                 this.view("public/register.jsp", request, response);
                 break;
             case "reset-pass":
+                request.setAttribute(Constant.TempDataKeys.STEP, "1");
                 this.view("public/reset-pass.jsp", request, response);
                 break;
             case "movie":
@@ -131,8 +134,73 @@ public class PublicController extends BaseController {
             case "register":
                 this.register(request, response);
                 break;
+            case "reset-pass": {
+                try {
+                    this.resetPass(request, response);
+                } catch (Exception ex) {
+                    Logger.getLogger(PublicController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.view("public/reset-pass.jsp", request, response);
+            }
+            break;
             default:
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                break;
+        }
+    }
+
+    private void resetPass(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, Exception {
+        String step = request.getParameter(Constant.TempDataKeys.STEP);
+        String userName = request.getParameter("txtUserName");
+        UserService userService = new UserService(this._dbConfig);
+        UserInfo obj = null;
+        switch (step) {
+            case "1":
+                obj = userService.getUser(userName);
+                if (obj != null) {
+                    request.setAttribute(Constant.TempDataKeys.SQ, obj.getUser_SQ());
+                    request.setAttribute(Constant.TempDataKeys.HD_USER, userName);
+                    request.setAttribute(Constant.TempDataKeys.STEP, "2");
+                } else {
+                    request.setAttribute(Constant.TempDataKeys.MSG, userName + " - User does not exists");
+                    request.setAttribute(Constant.TempDataKeys.STEP, "1");
+                }
+                break;
+            case "2":
+                userName = request.getParameter(Constant.TempDataKeys.HD_USER);
+                String sa = request.getParameter(Constant.TempDataKeys.SA);
+                obj = userService.getUser(userName);
+                if (obj != null) {
+                    if (obj.getUser_SA().equals(sa.trim())) {
+                        request.setAttribute(Constant.TempDataKeys.HD_USER, userName);
+                        request.setAttribute(Constant.TempDataKeys.STEP, "3");
+                    } else {
+                        request.setAttribute(Constant.TempDataKeys.SQ, obj.getUser_SQ());
+                        request.setAttribute(Constant.TempDataKeys.HD_USER, userName);
+                        request.setAttribute(Constant.TempDataKeys.MSG, "Security answer not matched.");
+                        request.setAttribute(Constant.TempDataKeys.STEP, "2");
+                    }
+                }
+                break;
+            case "3":
+                userName = request.getParameter(Constant.TempDataKeys.HD_USER);
+                String newPass = request.getParameter("txtRePass");
+
+                obj = new UserInfo();
+                obj.setUser_LoginName(userName);
+                obj.setUser_LoginPassword(newPass);
+                
+                if (userService.changePassword(obj, true)) {
+                    request.setAttribute(Constant.TempDataKeys.MSG, "Password change successfully.");
+                    request.setAttribute(Constant.TempDataKeys.STEP, "3");
+                } else {
+                    request.setAttribute(Constant.TempDataKeys.MSG, "Unable to change password.");
+                    request.setAttribute(Constant.TempDataKeys.STEP, "3");
+                }
+
+                break;
+            default:
                 break;
         }
     }
@@ -237,5 +305,5 @@ public class PublicController extends BaseController {
             }
             this.view("public/login.jsp", request, response);
         }
-    }    
+    }
 }

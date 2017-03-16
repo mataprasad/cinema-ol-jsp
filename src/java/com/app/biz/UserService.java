@@ -36,8 +36,8 @@ public class UserService {
         return this.dbUser.registerUser(obj);
     }
 
-    public boolean changePassword(UserInfo obj) throws Exception {
-        return this.dbUser.changePassword(obj);
+    public boolean changePassword(UserInfo obj,boolean withUserName) throws Exception {
+        return this.dbUser.changePassword(obj,withUserName);
     }
 
     public VMBookTicket getBookingDetails(long id) throws Exception {
@@ -46,5 +46,13 @@ public class UserService {
     
     public boolean updateUser(UserInfo obj) throws Exception {
         return this.dbUser.updateUser(obj);
+    }
+    
+    public boolean isUserExists(String txtUName) throws Exception {
+        return this.dbUser.isUserExists(txtUName);
+    }
+    
+    public UserInfo getUser(String userName) throws Exception {
+        return this.dbUser.getUser(userName);
     }
 }

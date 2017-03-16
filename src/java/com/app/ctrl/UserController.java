@@ -120,7 +120,7 @@ public class UserController extends BaseController {
                         userService = new UserService(this._dbConfig);
 
                         try {
-                            if (userService.changePassword(loggedUser)) {
+                            if (userService.changePassword(loggedUser,false)) {
                                 request.setAttribute(Constant.TempDataKeys.MSG, "Password Changed Successfully.");
                             } else {
                                 request.setAttribute(Constant.TempDataKeys.MSG, "Oops some problems occured !");
