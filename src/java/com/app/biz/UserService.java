@@ -43,4 +43,8 @@ public class UserService {
     public VMBookTicket getBookingDetails(long id) throws Exception {
         return this.dbUser.getBookingDetails(id);
     }
+    
+    public boolean updateUser(UserInfo obj) throws Exception {
+        return this.dbUser.updateUser(obj);
+    }
 }

@@ -10,11 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.app.bean.db.UserInfo;
 import com.app.bean.vm.VMBookingHistory;
+import com.app.bean.vm.VMLogin;
 import com.app.bean.vm.VMPwdReset;
 import com.app.biz.CommonService;
 import com.app.biz.UserService;
 import com.app.framework.web.BaseController;
+import com.app.framework.web.ModelBinder;
 import com.app.util.Constant;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet("/user")
 public class UserController extends BaseController {
@@ -70,17 +74,39 @@ public class UserController extends BaseController {
             throws ServletException, IOException {
         this._dbConfig = this.InitDbConfig();
         String action = this.getAction(request);
-
+        UserService userService = null;
         switch (action) {
             case "edit":
-                UserInfo objUserInfo = new UserInfo();
-                this.populate(objUserInfo, request);
-
-                /*UserInfo loggedUserInSession = (UserInfo) request.getSession().getAttribute(Constant.SessionKeys.USER_INFO);
+                UserInfo objUserInfo = ModelBinder.populateUserInfo(request);
+                UserInfo loggedUserInSession = this.getLoggedUser(request);
                 objUserInfo.setUser_LoginName(loggedUserInSession.getUser_LoginName());
-                objUserInfo.setUser_LoginPassword(loggedUserInSession.getUser_LoginPassword());*/
-                this.json(objUserInfo, request, response);
+                objUserInfo.setUser_LoginPassword(loggedUserInSession.getUser_LoginPassword());
+                objUserInfo.setUser_Id(loggedUserInSession.getUser_Id());
+                objUserInfo.setUser_IsActive(loggedUserInSession.isUser_IsActive());
+                //this.json(objUserInfo, request, response);
+                userService = new UserService(this._dbConfig);
+                try {
+                    if (userService.updateUser(objUserInfo)) {
+                        VMLogin objVMLogin = new VMLogin();
+                        objVMLogin.setTxtLoginId(objUserInfo.getUser_LoginName());
+                        objVMLogin.setTxtLoginPass(objUserInfo.getUser_LoginPassword());
+                        UserInfo dataTable = userService.doUserLogin(objVMLogin, loggedUserInSession.isUser_IsAdmin());                        
+                        request.getSession().setAttribute(Constant.SessionKeys.USER_INFO, dataTable);
+                        request.getSession().setAttribute(Constant.SessionKeys.IS_ADMIN, loggedUserInSession.isUser_IsAdmin());
+                        request.setAttribute(Constant.TempDataKeys.MSG, "Updated successfully.");
+                        CommonService commonService = new CommonService(this._dbConfig);
+                        try {
+                            request.setAttribute(Constant.TempDataKeys.STATE_LIST, commonService.getAllStates());
+                        } catch (Exception e) {
+                            this.json(e, request, response);
+                        }
 
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                this.view("user/edit.jsp", request, response);
                 break;
             case "change-pwd":
                 UserInfo loggedUser = (UserInfo) request.getSession().getAttribute(Constant.SessionKeys.USER_INFO);
@@ -91,7 +117,7 @@ public class UserController extends BaseController {
                     if (loggedUser.getUser_LoginPassword().equals(obj.getTxtCurrentPass().trim())) {
                         loggedUser.setUser_LoginPassword(obj.getTxtNewRePass().trim());
 
-                        UserService userService = new UserService(this._dbConfig);
+                        userService = new UserService(this._dbConfig);
 
                         try {
                             if (userService.changePassword(loggedUser)) {

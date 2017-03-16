@@ -88,4 +88,15 @@ public class BaseController extends HttpServlet {
         UserInfo userInfo = (UserInfo) request.getSession().getAttribute(Constant.SessionKeys.USER_INFO);
         return userInfo;
     }
+    
+    public void loginSuccessRedirect(HttpServletRequest request, HttpServletResponse response, UserInfo dataTable, boolean isAdmin)
+            throws ServletException, IOException {
+        request.getSession().setAttribute(Constant.SessionKeys.USER_INFO, dataTable);
+        request.getSession().setAttribute(Constant.SessionKeys.IS_ADMIN, isAdmin);
+        if (isAdmin) {
+            this.view("admin/index.jsp", request, response);
+        } else {
+            this.view("user/index.jsp", request, response);
+        }
+    }
 }
