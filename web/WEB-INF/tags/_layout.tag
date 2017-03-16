@@ -95,5 +95,10 @@
     <%= request.getContextPath()%>
     <%= request.getRequestURI()%>
     <%= request.getRequestURL()%>
+    <%=  request.getRealPath("/uploads/" + java.util.UUID.randomUUID().toString())%>
+    <%
+        String ext1 = org.apache.commons.io.FilenameUtils.getExtension("/path/to/file/foo.txt");
+    %>
+    <%=ext1 %>
     -->
 </html>

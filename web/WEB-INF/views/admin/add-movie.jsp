@@ -47,11 +47,11 @@
             }
             $(function () {
                 /*$("#txtReleaseDate").datepicker({
-                    changeMonth: true,
-                    yearRange: '1950:2030',
-                    changeYear: true
-                });
-                $("#txtReleaseDate").datepicker("option", "dateFormat", "dd/mm/yy");*/
+                 changeMonth: true,
+                 yearRange: '1950:2030',
+                 changeYear: true
+                 });
+                 $("#txtReleaseDate").datepicker("option", "dateFormat", "dd/mm/yy");*/
             });
 
             function fn_ValidateForm() {
@@ -93,20 +93,17 @@
         </script>
     </jsp:attribute>
     <jsp:body>
-        <form action="@Url.Action("AddMovie", "Admin")" method="post" enctype="multipart/form-data" onsubmit="return fn_ValidateForm();" >
-              <div style="padding: 0px; margin: 0px; border: 1px solid #3333CC">
+        <form action="<c:url value="/admin?do=add-movie"/>" method="post" enctype="multipart/form-data" onsubmit="return fn_ValidateForm();" >
+            <div style="padding: 0px; margin: 0px; border: 1px solid #3333CC">
                 <div>
                     <div style="border-style: none none solid none; border-width: 1px; border-color: #333333; height: 30px; background-color: #6600CC;">
                         <a style="font-size: 15pt; color: White; display: block; vertical-align: middle; line-height: 30px; text-align: justify; margin-left: 7px;">ADD A MOVIE HERE</a>
 
                     </div>
                 </div>
-                <p style="color: red;">
-                    @if (TempData["Msg"] != null)
-                    {
-                    @TempData["Msg"]
-                    }
-                </p>
+                <c:if test="${msg!=null && msg!=''}">
+                    <p style="color: red;">${msg}</p>
+                </c:if>
                 <table class="style7">
                     <tr>
                         <td class="style28">&nbsp;</td>
@@ -123,8 +120,11 @@
                     <tr>
                         <td class="style28">Status :</td>
                         <td align="left" class="style26">
-                            @Html.DropDownList("ddlStatus", Model.Where(p => p.Key == "StatusList").Select(p => p.Value).FirstOrDefault(), new {
-                            id = "ddlStatus", style = "width:150px;" })
+                            <select id="ddlStatus" name="ddlStatus" style = "width:150px;">
+                                <c:forEach var="item" items="${ddlStatus}">
+                                    <option value="${item.getValue()}">${item.getText()}</option>
+                                </c:forEach> 
+                            </select>
                         </td>
                         <td align="left" class="style27"></td>
                     </tr>
@@ -166,16 +166,22 @@
                     <tr>
                         <td class="style28">Language :</td>
                         <td align="left" class="style26">
-                            @Html.DropDownList("ddlLanguage", Model.Where(p => p.Key == "ddlLanguage").Select(p => p.Value).FirstOrDefault(), new {
-                            id = "ddlLanguage", style = "width:150px;" })
+                            <select id="ddlLanguage" name="ddlLanguage" style = "width:150px;">
+                                <c:forEach var="item" items="${ddlLanguage}">
+                                    <option value="${item.getValue()}">${item.getText()}</option>
+                                </c:forEach> 
+                            </select>
                         </td>
                         <td align="left" class="style27"></td>
                     </tr>
                     <tr>
                         <td class="style28">Industry :</td>
                         <td align="left" class="style26">
-                            @Html.DropDownList("ddlIndustry", Model.Where(p => p.Key == "IndustryList").Select(p => p.Value).FirstOrDefault(), new {
-                            id = "ddlIndustry", style = "width:150px;" })
+                            <select id="ddlIndustry" name="ddlIndustry" style = "width:150px;">
+                                <c:forEach var="item" items="${ddlIndustry}">
+                                    <option value="${item.getValue()}">${item.getText()}</option>
+                                </c:forEach> 
+                            </select>
                         </td>
                         <td align="left" class="style27"></td>
                     </tr>

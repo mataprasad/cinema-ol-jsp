@@ -34,11 +34,11 @@
             }
             $(function () {
                 /*$("#datepicker").datepicker({
-                    changeMonth: true,
-                    yearRange: '2013:2030',
-                    changeYear: true
-                });
-                $("#datepicker").datepicker("option", "dateFormat", "dd/mm/yy");*/
+                 changeMonth: true,
+                 yearRange: '2013:2030',
+                 changeYear: true
+                 });
+                 $("#datepicker").datepicker("option", "dateFormat", "dd/mm/yy");*/
             });
 
             function fn_ValidateForm() {
@@ -66,20 +66,16 @@
 
     </jsp:attribute>
     <jsp:body>
-        <form action="@Url.Action("ManageShow", "Admin")" method="post" onsubmit="return fn_ValidateForm();">
-              <div style="padding: 0px; margin: 0px; border: 1px solid #3333CC">
+        <form action="<c:url value="/admin?do=manage-show"/>" method="post" onsubmit="return fn_ValidateForm();">
+            <div style="padding: 0px; margin: 0px; border: 1px solid #3333CC">
                 <div>
                     <div style="border-style: none none solid none; border-width: 1px; border-color: #333333; height: 30px; background-color: #6600CC;">
                         <a style="font-size: 15pt; color: White; display: block; vertical-align: middle; line-height: 30px; text-align: justify; margin-left: 7px;">MANAGE SHOWS HERE --</a>
-
                     </div>
                 </div>
-                <p style="color: red;">
-                    @if (TempData["Msg"] != null)
-                    {
-                    @TempData["Msg"] 
-                    }
-                </p>
+                <c:if test="${msg!=null && msg!=''}">
+                    <p style="color: red;">${msg}</p>
+                </c:if>
                 <table class="style7">
                     <tr>
                         <td class="style30">&nbsp;</td>
@@ -89,7 +85,11 @@
                     <tr>
                         <td class="style30" align="left">Select Hall :</td>
                         <td class="style28" align="left">
-                            @Html.DropDownList("ddlHall", Model.Where(p => p.Key == "HallList").Select(p => p.Value).FirstOrDefault(), new { id = "ddlHall", style = "height:25px;width:150px;" })
+                            <select id="ddlHall" name="ddlHall" style = "height:25px;width:150px;">
+                                <c:forEach var="item" items="${ddlHallList}">
+                                    <option value="${item.getValue()}">${item.getText()}</option>
+                                </c:forEach> 
+                            </select>                            
                         </td>
                         <td class="style28" align="left">&nbsp;</td>
                     </tr>
@@ -105,14 +105,22 @@
                     <tr>
                         <td class="style30" align="left">Select Time :</td>
                         <td class="style28" align="left">
-                            @Html.DropDownList("ddlTime", Model.Where(p => p.Key == "TimeList").Select(p => p.Value).FirstOrDefault(), new { id = "ddlTime", style = "height:25px;width:150px;" })
+                            <select id="ddlTime" name="ddlTime" style = "height:25px;width:150px;">
+                                <c:forEach var="item" items="${ddlTimeList}">
+                                    <option value="${item.getValue()}">${item.getText()}</option>
+                                </c:forEach> 
+                            </select>
                         </td>
                         <td class="style28" align="left">&nbsp;</td>
                     </tr>
                     <tr>
                         <td class="style30" align="left">Select Movie :</td>
                         <td class="style28" align="left">
-                            @Html.DropDownList("ddlMovie", Model.Where(p => p.Key == "MovieList").Select(p => p.Value).FirstOrDefault(), new { id = "ddlMovie", style = "height:25px;width:150px;" })
+                            <select id="ddlMovie" name="ddlMovie" style = "height:25px;width:150px;">
+                                <c:forEach var="item" items="${ddlMovieList}">
+                                    <option value="${item.getValue()}">${item.getText()}</option>
+                                </c:forEach> 
+                            </select>
                         </td>
                         <td class="style28" align="left">&nbsp;</td>
                     </tr>
@@ -124,7 +132,6 @@
                         <td class="style28" align="left">&nbsp;</td>
                     </tr>
                 </table>
-
             </div>
         </form>
     </jsp:body>

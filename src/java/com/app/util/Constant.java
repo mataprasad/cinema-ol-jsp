@@ -40,7 +40,13 @@ public class Constant {
         public final static String ERROR = "error";
         public final static String RECORDS_COUNT = "recordsCount";
         public final static String TICKET_LIST = "ticketList";
-        public final static String TICKET_DATA = "ticketData";
+        public final static String TICKET_DATA = "ticketData";        
+        public final static String DDL_HALL_LIST = "ddlHallList";
+        public final static String DDL_TIME_LIST = "ddlTimeList";
+        public final static String DDL_MOVIE_LIST = "ddlMovieList";        
+        public final static String DDL_STATUS_LIST = "ddlStatus";
+        public final static String DDL_LANGUAGE_LIST = "ddlLanguage";
+        public final static String DDL_INDUSTRY_LIST = "ddlIndustry";
     }
 
     public class SessionKeys {

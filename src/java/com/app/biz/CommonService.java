@@ -13,26 +13,50 @@ import com.app.db.DbTest;
 
 public class CommonService {
 
-	DbConfigHelper dbConfig;
-	DbCommon dbCommon = null;
+    DbConfigHelper dbConfig;
+    DbCommon dbCommon = null;
 
-	public CommonService(DbConfigHelper dbConfig) {
-		this.dbConfig = dbConfig;
-		this.dbCommon = new DbCommon(dbConfig);
-	}
+    public CommonService(DbConfigHelper dbConfig) {
+        this.dbConfig = dbConfig;
+        this.dbCommon = new DbCommon(dbConfig);
+    }
 
-	public PingResponse getPingResponse() {
-		PingResponse ping = new PingResponse();
-		ping.setDateIsoString(new DateTime().toMutableDateTimeISO().toString());
-		return ping;
-	}
+    public PingResponse getPingResponse() {
+        PingResponse ping = new PingResponse();
+        ping.setDateIsoString(new DateTime().toMutableDateTimeISO().toString());
+        return ping;
+    }
 
-	public String testDbConnection() throws SQLException {
-		DbTest dbTest = new DbTest(dbConfig);
-		return dbTest.Test();
-	}
+    public String testDbConnection() throws SQLException {
+        DbTest dbTest = new DbTest(dbConfig);
+        return dbTest.Test();
+    }
 
-	public List<SelectListItem> getAllStates() throws Exception {
-		return this.dbCommon.getAllStates();
-	}
+    public List<SelectListItem> getAllStates() throws Exception {
+        return this.dbCommon.getAllStates();
+    }
+
+    public List<SelectListItem> getHallList() throws Exception {
+        return this.dbCommon.getHallList();
+    }
+
+    public List<SelectListItem> getTimeList() throws Exception {
+        return this.dbCommon.getTimeList();
+    }
+
+    public List<SelectListItem> getMovieList() throws Exception {
+        return this.dbCommon.getMovieList();
+    }
+
+    public List<SelectListItem> getStatusList() throws Exception {
+        return this.dbCommon.getStatusList();
+    }
+
+    public List<SelectListItem> getLanguageList() throws Exception {
+        return this.dbCommon.getLanguageList();
+    }
+
+    public List<SelectListItem> getIndustryList() throws Exception {
+        return this.dbCommon.getIndustryList();
+    }
 }
