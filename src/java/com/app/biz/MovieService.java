@@ -32,4 +32,12 @@ public class MovieService {
 	public List<MovieInfo> getUpCommingMovies() throws Exception {
 		return this.dbMovie.getUpCommingMovies();
 	}
+        
+        public List<MovieInfo> getMoviesToRemove() throws Exception {
+            return this.dbMovie.getMoviesToRemove();
+        }
+        
+        public boolean removeMovie(String[] ids) throws Exception {
+            return this.dbMovie.removeMovie(ids);
+        }
 }
