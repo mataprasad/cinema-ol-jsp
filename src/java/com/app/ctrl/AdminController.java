@@ -2,7 +2,7 @@ package com.app.ctrl;
 
 import com.app.bean.db.MovieInfo;
 import com.app.bean.json.SelectListItem;
-import com.app.bean.vm.VMMovieInfo;
+import com.app.bean.vm.VMManageShow;
 import com.app.biz.CommonService;
 import com.app.biz.MovieService;
 import java.io.IOException;
@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.app.framework.web.BaseController;
 import com.app.framework.web.ModelBinder;
+import com.app.framework.web.MultipartFilter;
 import com.app.util.Constant;
 import com.google.gson.Gson;
 import java.io.File;
@@ -30,41 +31,41 @@ import org.apache.commons.io.FilenameUtils;
 
 @WebServlet("/admin")
 public class AdminController extends BaseController {
-
+    
     private static final long serialVersionUID = 1L;
-
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         this._dbConfig = this.InitDbConfig();
         String action = this.getAction(request);
         CommonService commonService = null;
-
+        
         switch (action) {
             case "":
             case "home":
                 this.view("admin/index.jsp", request, response);
                 break;
             case "manage-show":
-
+                
                 commonService = new CommonService(this._dbConfig);
-
+                
                 List<SelectListItem> ddlHallList = null;
                 List<SelectListItem> ddlTimeList = null;
                 List<SelectListItem> ddlMovieList = null;
-
+                
                 try {
                     ddlHallList = commonService.getHallList();
                     ddlTimeList = commonService.getTimeList();
                     ddlMovieList = commonService.getMovieList();
-
+                    
                     request.setAttribute(Constant.TempDataKeys.DDL_HALL_LIST, ddlHallList);
                     request.setAttribute(Constant.TempDataKeys.DDL_TIME_LIST, ddlTimeList);
                     request.setAttribute(Constant.TempDataKeys.DDL_MOVIE_LIST, ddlMovieList);
                 } catch (Exception ex) {
                     Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+                
                 this.view("admin/manage-show.jsp", request, response);
                 break;
             case "remove-movie":
@@ -85,35 +86,35 @@ public class AdminController extends BaseController {
                 break;
         }
     }
-
+    
     private void addMovieGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         CommonService commonService = new CommonService(this._dbConfig);
-
+        
         List<SelectListItem> ddlStatus = null;
         List<SelectListItem> ddlLanguage = null;
         List<SelectListItem> ddlIndustry = null;
-
+        
         try {
             ddlStatus = commonService.getStatusList();
             ddlLanguage = commonService.getLanguageList();
             ddlIndustry = commonService.getIndustryList();
-
+            
             request.setAttribute(Constant.TempDataKeys.DDL_STATUS_LIST, ddlStatus);
             request.setAttribute(Constant.TempDataKeys.DDL_LANGUAGE_LIST, ddlLanguage);
             request.setAttribute(Constant.TempDataKeys.DDL_INDUSTRY_LIST, ddlIndustry);
         } catch (Exception ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         this.view("admin/add-movie.jsp", request, response);
     }
-
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         this._dbConfig = this.InitDbConfig();
         String action = this.getAction(request);
-
+        
         switch (action) {
             case "remove-movie":
                 MovieService movieService = new MovieService(this._dbConfig);
@@ -134,8 +135,8 @@ public class AdminController extends BaseController {
                 this.view("admin/remove-movie.jsp", request, response);
             case "add-movie":
                 MovieInfo objMovieInfo = ModelBinder.populateMovieInfo(request);
-
-                this.json(objMovieInfo, request, response);
+                Object obj_Z=request.getAttribute("parsedRequest");
+                this.json(obj_Z, request, response);
                 if (1 == 1) {
                     return;
                 }
@@ -152,11 +153,11 @@ public class AdminController extends BaseController {
 
                     // Create a new file upload handler
                     ServletFileUpload upload = new ServletFileUpload(factory);
-
+                    
                     try {
                         // Parse the request
                         List<FileItem> items = upload.parseRequest(request);
-
+                        
                         if (items != null) {
                             for (FileItem item : items) {
                                 if (!item.isFormField()) {
@@ -168,7 +169,7 @@ public class AdminController extends BaseController {
                                 }
                             }
                         }
-
+                        
                     } catch (FileUploadException ex) {
                         Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (Exception ex) {
@@ -177,6 +178,11 @@ public class AdminController extends BaseController {
                 }
                 addMovieGet(request, response);
                 break;
+            case "manage-show":
+                VMManageShow objVMManageShow = new VMManageShow();
+                this.populate(objVMManageShow, request);
+                this.json(objVMManageShow, request, response);
+                break;            
             default:
                 break;
         }

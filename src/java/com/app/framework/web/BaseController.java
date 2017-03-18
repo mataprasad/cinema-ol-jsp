@@ -16,6 +16,8 @@ import com.app.bean.db.UserInfo;
 import com.app.db.DbConfigHelper;
 import com.app.util.Constant;
 import com.google.gson.Gson;
+import java.util.Collection;
+import java.util.Map;
 
 public class BaseController extends HttpServlet {
 
@@ -88,7 +90,7 @@ public class BaseController extends HttpServlet {
         UserInfo userInfo = (UserInfo) request.getSession().getAttribute(Constant.SessionKeys.USER_INFO);
         return userInfo;
     }
-    
+
     public void loginSuccessRedirect(HttpServletRequest request, HttpServletResponse response, UserInfo dataTable, boolean isAdmin)
             throws ServletException, IOException {
         request.getSession().setAttribute(Constant.SessionKeys.USER_INFO, dataTable);
@@ -97,6 +99,33 @@ public class BaseController extends HttpServlet {
             this.view("admin/index.jsp", request, response);
         } else {
             this.view("user/index.jsp", request, response);
+        }
+    }
+
+    /**
+     * Check if the given object is empty. Returns true if the object is null,
+     * or if it is an instance of String and its trimmed length is zero, or if
+     * it is an instance of an ordinary array and its length is zero, or if it
+     * is an instance of Collection and its size is zero, or if it is an
+     * instance of Map and its size is zero, or if its String representation is
+     * null or the trimmed length of its String representation is zero.
+     *
+     * @param value The object to be determined on emptiness.
+     * @return True if the given object value is empty.
+     */
+    public boolean isEmpty(Object value) {
+        if (value == null) {
+            return true;
+        } else if (value instanceof String) {
+            return ((String) value).trim().length() == 0;
+        } else if (value instanceof Object[]) {
+            return ((Object[]) value).length == 0;
+        } else if (value instanceof Collection<?>) {
+            return ((Collection<?>) value).size() == 0;
+        } else if (value instanceof Map<?, ?>) {
+            return ((Map<?, ?>) value).size() == 0;
+        } else {
+            return value.toString() == null || value.toString().trim().length() == 0;
         }
     }
 }

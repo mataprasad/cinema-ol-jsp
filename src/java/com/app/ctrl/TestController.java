@@ -1,25 +1,17 @@
 package com.app.ctrl;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.app.bean.db.UserInfo;
 import com.app.bean.db.UserInfo1;
-import com.app.bean.vm.VMBookingHistory;
-import com.app.bean.vm.VMLogin;
-import com.app.bean.vm.VMPwdReset;
 import com.app.biz.CommonService;
 import com.app.biz.UserService;
 import com.app.framework.web.BaseController;
-import com.app.framework.web.ModelBinder;
 import com.app.util.Constant;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @WebServlet("/test")
 public class TestController extends BaseController {
@@ -60,7 +52,7 @@ public class TestController extends BaseController {
 
                 //this.view("user/edit.jsp", request, response);
                 break;
-            
+
             default:
                 break;
         }

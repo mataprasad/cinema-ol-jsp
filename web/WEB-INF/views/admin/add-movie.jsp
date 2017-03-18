@@ -94,6 +94,7 @@
     </jsp:attribute>
     <jsp:body>
         <form action="<c:url value="/admin?do=add-movie"/>" method="post" enctype="multipart/form-data" onsubmit="return fn_ValidateForm();" >
+            <input type="hidden" name="do" value="add-movie" />
             <div style="padding: 0px; margin: 0px; border: 1px solid #3333CC">
                 <div>
                     <div style="border-style: none none solid none; border-width: 1px; border-color: #333333; height: 30px; background-color: #6600CC;">
@@ -217,6 +218,7 @@
                 </table>
 
             </div>
+            
         </form>
 
     </jsp:body>
