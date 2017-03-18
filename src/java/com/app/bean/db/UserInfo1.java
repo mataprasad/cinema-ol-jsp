@@ -1,14 +1,8 @@
 package com.app.bean.db;
 
-public class UserInfo {
+public class UserInfo1 {
 
-    public int getUser_Id() {
-        return User_Id;
-    }
-
-    public void setUser_Id(int user_Id) {
-        User_Id = user_Id;
-    }
+   
 
     public String getUser_LoginName() {
         return User_LoginName;
@@ -106,14 +100,7 @@ public class UserInfo {
         User_Type = user_Type;
     }
 
-    public boolean isUser_IsActive() {
-        return User_IsActive;
-    }
-
-    public void setUser_IsActive(boolean user_IsActive) {
-        User_IsActive = user_IsActive;
-    }
-
+  
     public boolean isUser_IsAdmin() {
         if ("ADMIN".equals(User_Type)) {
             return true;
@@ -121,7 +108,6 @@ public class UserInfo {
         return false;
     }
 
-    private int User_Id = 0;
 
     private String User_LoginName = "";
 
@@ -147,5 +133,4 @@ public class UserInfo {
 
     private String User_Type = "";
 
-    private boolean User_IsActive = false;
 }

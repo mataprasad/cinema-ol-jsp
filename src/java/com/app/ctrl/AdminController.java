@@ -1,6 +1,8 @@
 package com.app.ctrl;
 
+import com.app.bean.db.MovieInfo;
 import com.app.bean.json.SelectListItem;
+import com.app.bean.vm.VMMovieInfo;
 import com.app.biz.CommonService;
 import com.app.biz.MovieService;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.app.framework.web.BaseController;
+import com.app.framework.web.ModelBinder;
 import com.app.util.Constant;
 import com.google.gson.Gson;
 import java.io.File;
@@ -130,6 +133,12 @@ public class AdminController extends BaseController {
                 }
                 this.view("admin/remove-movie.jsp", request, response);
             case "add-movie":
+                MovieInfo objMovieInfo = ModelBinder.populateMovieInfo(request);
+
+                this.json(objMovieInfo, request, response);
+                if (1 == 1) {
+                    return;
+                }
                 // Check that we have a file upload request
                 boolean isMultipart = ServletFileUpload.isMultipartContent(request);
                 if (isMultipart) {

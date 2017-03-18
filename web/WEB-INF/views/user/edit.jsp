@@ -181,7 +181,7 @@
         <div
 					style="border-style: none none solid none; border-color: #CCCCCC; padding: 0px; margin: 0px; width: 200px; height: 40px; float: left; border-bottom-width: 1px;"></div>
     </div>
-    <input type="hidden" value="" id="User_Id" name="User_Id" />
+    <input type="hidden" value="0" id="User_Id" name="User_Id" />
 </form>
 
 </jsp:body>

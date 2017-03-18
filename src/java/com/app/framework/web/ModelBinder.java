@@ -1,5 +1,6 @@
 package com.app.framework.web;
 
+import com.app.bean.db.MovieInfo;
 import com.app.bean.db.UserInfo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,17 @@ public class ModelBinder {
         obj.setUser_SA(request.getParameter("User_SA"));
         obj.setUser_Type(request.getParameter("User_Type"));
 
+        return obj;
+    }
+
+    public static MovieInfo populateMovieInfo(HttpServletRequest request) {
+        MovieInfo obj = new MovieInfo();
+        obj.setMovie_Casts(request.getParameter("txtCasts"));
+        obj.setMovie_Director(request.getParameter("txtDirector"));
+        obj.setMovie_Industry(request.getParameter("ddlIndustry"));
+        obj.setMovie_Language(request.getParameter("ddlLanguage"));
+        obj.setMovie_ReleaseDate(request.getParameter("txtReleaseDate"));
+        //obj.setMovie_Status(Integer.parseInt(request.getParameter("ddlStatus")));
         return obj;
     }
 }
