@@ -92,31 +92,7 @@ public class DbCommon {
             throw ex;
         }
     }
-
-    public List<SelectListItem> getMovieList() throws Exception {
-        try {
-            SelectListItem firstItem = new SelectListItem();
-            firstItem.setText("--SELECT--");
-            firstItem.setValue("0");
-
-            DataSource dataSource = new com.app.db.DataSource(this.dbConfig).getBds();
-
-            QueryRunner run = new QueryRunner(dataSource, true);
-
-            ResultSetHandler<List<SelectListItem>> h = new BeanListHandler<SelectListItem>(SelectListItem.class);
-
-            List<SelectListItem> data = run.query("SELECT Movie_Title as text ,Movie_Title as value FROM MovieInfo WHERE Movie_Status<>3", h);
-
-            if (data == null) {
-                data = new ArrayList<SelectListItem>();
-            }
-            data.add(0, firstItem);
-            return data;
-        } catch (Exception ex) {
-            throw ex;
-        }
-    }
-
+   
     public List<SelectListItem> getStatusList() throws Exception {
         try {
             SelectListItem firstItem = new SelectListItem();

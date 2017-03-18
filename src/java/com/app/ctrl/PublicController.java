@@ -26,6 +26,7 @@ public class PublicController extends BaseController {
 
     private static final long serialVersionUID = 1L;
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -105,6 +106,7 @@ public class PublicController extends BaseController {
         }
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -275,6 +277,7 @@ public class PublicController extends BaseController {
             email.setTextMsg("Your email client does not support HTML messages");
             email.send();
         } catch (Exception ex) {
+            //intentionaly left blank
         }
 
         request.setAttribute(Constant.TempDataKeys.MSG, "Thanx for your feedback.");

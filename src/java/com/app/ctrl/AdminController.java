@@ -1,10 +1,12 @@
 package com.app.ctrl;
 
+import com.app.bean.db.MovieInfo;
 import com.app.bean.json.SelectListItem;
 import com.app.bean.vm.VMManageShow;
 import com.app.bean.vm.VMMovieInfo;
 import com.app.biz.CommonService;
 import com.app.biz.MovieService;
+import com.app.biz.ShowService;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -30,6 +32,7 @@ public class AdminController extends BaseController {
 
         this._dbConfig = this.InitDbConfig();
         String action = this.getAction(request);
+        MovieService movieService = null;
 
         switch (action) {
             case "":
@@ -37,29 +40,10 @@ public class AdminController extends BaseController {
                 this.view("admin/index.jsp", request, response);
                 break;
             case "manage-show":
-
-                CommonService commonService = new CommonService(this._dbConfig);
-
-                List<SelectListItem> ddlHallList = null;
-                List<SelectListItem> ddlTimeList = null;
-                List<SelectListItem> ddlMovieList = null;
-
-                try {
-                    ddlHallList = commonService.getHallList();
-                    ddlTimeList = commonService.getTimeList();
-                    ddlMovieList = commonService.getMovieList();
-
-                    request.setAttribute(Constant.TempDataKeys.DDL_HALL_LIST, ddlHallList);
-                    request.setAttribute(Constant.TempDataKeys.DDL_TIME_LIST, ddlTimeList);
-                    request.setAttribute(Constant.TempDataKeys.DDL_MOVIE_LIST, ddlMovieList);
-                } catch (Exception ex) {
-                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                this.view("admin/manage-show.jsp", request, response);
+                this.manageMovieGet(request, response);
                 break;
             case "remove-movie":
-                MovieService movieService = new MovieService(this._dbConfig);
+                movieService = new MovieService(this._dbConfig);
                  {
                     try {
                         request.setAttribute(Constant.TempDataKeys.MOVIE_LIST, movieService.getMoviesToRemove());
@@ -70,11 +54,107 @@ public class AdminController extends BaseController {
                 this.view("admin/remove-movie.jsp", request, response);
                 break;
             case "add-movie":
-                addMovieGet(request, response);
+                this.addMovieGet(request, response);
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        this._dbConfig = this.InitDbConfig();
+        String action = this.getAction(request);
+        MovieService movieService = null;
+
+        switch (action) {
+            case "remove-movie":
+                movieService = new MovieService(this._dbConfig);
+                String json = request.getParameter("hdSelectedMovie");
+                Gson g = new Gson();
+                String[] selectedValues = g.fromJson(json, String[].class);
+                 {
+                    try {
+                        if (movieService.removeMovie(selectedValues)) {
+                            request.setAttribute(Constant.TempDataKeys.MSG, "Selected item removed successfully.");
+                        }
+                        request.setAttribute(Constant.TempDataKeys.MOVIE_LIST, movieService.getMoviesToRemove());
+                    } catch (Exception ex) {
+                        Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                this.view("admin/remove-movie.jsp", request, response);
+            case "add-movie":
+                VMMovieInfo objMovieInfo = new VMMovieInfo();
+                this.populate(objMovieInfo, request);
+                String uploadedFileName = this.uploadFile(request, "fuPoster", "images/movieImages");
+                MovieInfo obj = new MovieInfo();
+                obj.setMovie_Casts(objMovieInfo.getTxtCasts());
+                obj.setMovie_Director(objMovieInfo.getTxtDirector());
+                obj.setMovie_Industry(objMovieInfo.getDdlIndustry());
+                obj.setMovie_Language(objMovieInfo.getDdlLanguage());
+                obj.setMovie_ReleaseDate(objMovieInfo.getTxtReleaseDate());
+                obj.setMovie_Status(objMovieInfo.getDdlStatus());
+                obj.setMovie_Title(objMovieInfo.getTxtTitle());
+                obj.setMovie_ImageURL(uploadedFileName);
+                movieService = new MovieService(this._dbConfig);
+                 {
+                    try {
+                        if (movieService.addNewMovie(obj)) {
+                            request.setAttribute(Constant.TempDataKeys.MSG, "Movie Added successfully.");
+                        } else {
+                            request.setAttribute(Constant.TempDataKeys.MSG, "Oops there is issue while processing.");
+                        }
+                    } catch (Exception ex) {
+                        Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                addMovieGet(request, response);
+                break;
+            case "manage-show":
+                VMManageShow objVMManageShow = new VMManageShow();
+                this.populate(objVMManageShow, request);
+                ShowService showService = new ShowService(this._dbConfig);
+                 {
+                    try {
+                        if (showService.addShowInfo(objVMManageShow)) {
+                            request.setAttribute(Constant.TempDataKeys.MSG, "Show added successfully.");
+                        } else {
+                            request.setAttribute(Constant.TempDataKeys.MSG, "Oops there is issue while processing.");
+                        }
+                    } catch (Exception ex) {
+                        Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                this.manageMovieGet(request, response);
+            default:
+                break;
+        }
+    }
+
+    private void manageMovieGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        CommonService commonService = new CommonService(this._dbConfig);
+        MovieService movieService = new MovieService(this._dbConfig);
+
+        List<SelectListItem> ddlHallList = null;
+        List<SelectListItem> ddlTimeList = null;
+        List<SelectListItem> ddlMovieList = null;
+
+        try {
+            ddlHallList = commonService.getHallList();
+            ddlTimeList = commonService.getTimeList();
+            ddlMovieList = movieService.getMovieList();
+
+            request.setAttribute(Constant.TempDataKeys.DDL_HALL_LIST, ddlHallList);
+            request.setAttribute(Constant.TempDataKeys.DDL_TIME_LIST, ddlTimeList);
+            request.setAttribute(Constant.TempDataKeys.DDL_MOVIE_LIST, ddlMovieList);
+        } catch (Exception ex) {
+            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        this.view("admin/manage-show.jsp", request, response);
     }
 
     private void addMovieGet(HttpServletRequest request, HttpServletResponse response)
@@ -100,44 +180,4 @@ public class AdminController extends BaseController {
         this.view("admin/add-movie.jsp", request, response);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        this._dbConfig = this.InitDbConfig();
-        String action = this.getAction(request);
-
-        switch (action) {
-            case "remove-movie":
-                MovieService movieService = new MovieService(this._dbConfig);
-                String json = request.getParameter("hdSelectedMovie");
-                Gson g = new Gson();
-                String[] selectedValues = g.fromJson(json, String[].class);
-                 {
-                    try {
-                        if (movieService.removeMovie(selectedValues)) {
-                            request.setAttribute(Constant.TempDataKeys.MSG, "Selected item removed successfully.");
-                        }
-                        request.setAttribute(Constant.TempDataKeys.MOVIE_LIST, movieService.getMoviesToRemove());
-                    } catch (Exception ex) {
-                        Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                this.view("admin/remove-movie.jsp", request, response);
-            case "add-movie":
-                VMMovieInfo objMovieInfo = new VMMovieInfo();
-                this.populate(objMovieInfo, request);
-
-                this.uploadFile(request, "fuPoster");
-
-                addMovieGet(request, response);
-                break;
-            case "manage-show":
-                VMManageShow objVMManageShow = new VMManageShow();
-                this.populate(objVMManageShow, request);
-                this.json(objVMManageShow, request, response);
-                break;
-            default:
-                break;
-        }
-    }
 }

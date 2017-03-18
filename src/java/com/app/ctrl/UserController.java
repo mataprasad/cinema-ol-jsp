@@ -25,6 +25,7 @@ public class UserController extends BaseController {
 
     private static final long serialVersionUID = 1L;
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -70,6 +71,7 @@ public class UserController extends BaseController {
         }
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         this._dbConfig = this.InitDbConfig();

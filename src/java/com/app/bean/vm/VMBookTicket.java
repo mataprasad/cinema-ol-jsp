@@ -1,12 +1,8 @@
 package com.app.bean.vm;
 
 import com.app.bean.json.SelectListItem;
-import com.app.util.Constant;
 import com.app.util.DateHelper;
 import java.util.*;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 public class VMBookTicket {
 

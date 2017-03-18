@@ -92,6 +92,7 @@
         </div>
     </body>
     <!-- 
+    <%/* %>
     <%= request.getContextPath()%>
     <%= request.getRequestURI()%>
     <%= request.getRequestURL()%>
@@ -100,5 +101,6 @@
         String ext1 = org.apache.commons.io.FilenameUtils.getExtension("/path/to/file/foo.txt");
     %>
     <%=ext1 %>
+    <% */%>
     -->
 </html>

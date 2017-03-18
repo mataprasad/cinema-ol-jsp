@@ -10,6 +10,6 @@ if(movieList==null){
 %>
 <c:url value="/" var="sBaseUrl" />
 <%for(int i=0;i<movieList.size();i++){ %>
-<li><a href="${sBaseUrl}<%=movieList.get(i).getText() %>" title=""></a></li>
+<li><a href="${sBaseUrl}images/movieImages/<%=movieList.get(i).getText() %>" title=""></a></li>
 <%} %>
 

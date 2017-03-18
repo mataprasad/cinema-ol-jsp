@@ -1,5 +1,7 @@
 package com.app.bean.vm;
 
+import com.app.util.DateHelper;
+
 public class VMManageShow {
 
     private String ddlHall = "";
@@ -17,6 +19,10 @@ public class VMManageShow {
 
     public String getDatepicker() {
         return datepicker;
+    }
+
+    public String getDatepickerDate() {
+        return DateHelper.FromDD_MM_YYYY(datepicker);
     }
 
     public void setDatepicker(String datepicker) {

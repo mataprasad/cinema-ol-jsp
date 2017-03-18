@@ -20,7 +20,7 @@
 
 		<div
 			style="padding: 0px; margin: 5px auto 5px auto; border: 1px solid #000000; width: 600px; height: 300px;">
-			<img src="${sBaseUrl}<%=movieList.get(i).getMovie_ImageURL() %>" style="height: 300px; width: 600px;"
+			<img src="${sBaseUrl}images/movieImages/<%=movieList.get(i).getMovie_ImageURL() %>" style="height: 300px; width: 600px;"
 				alt="" />
 		</div>
 		<div

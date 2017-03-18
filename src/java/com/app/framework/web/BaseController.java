@@ -46,7 +46,7 @@ public class BaseController extends HttpServlet {
         }
     }
 
-    public String uploadFile(HttpServletRequest request, String postedFileFieldName) throws ServletException {
+    public String uploadFile(HttpServletRequest request, String postedFileFieldName, String uploadFolderRelativePath) throws ServletException {
 
         String uploadedFileName = "";
         // Validate file.
@@ -70,25 +70,24 @@ public class BaseController extends HttpServlet {
         // Some browsers (e.g. IE, Opera) also sends the path, which is completely irrelevant.
         String fileName = FilenameUtils.getName(fileItem.getName());
         // Prepare filename prefix and suffix for an unique filename in upload folder.
-        File uploadFolder = new File(servletContext.getRealPath("/uploads/").toLowerCase());
+        File uploadFolder = new File(servletContext.getRealPath("/" + uploadFolderRelativePath + "/").toLowerCase());
         String ext = FilenameUtils.getExtension(fileName).toLowerCase();
         String prefix = FilenameUtils.getBaseName(UUID.randomUUID().toString().toLowerCase());
         String suffix = "." + ext;
+        //String fullFileName = (uploadFolder + prefix + suffix).toLowerCase();
 
         try {
             // Prepare unique local file based on file name of uploaded file.
+            
             File file = File.createTempFile(prefix, suffix, uploadFolder);
-
             // Write uploaded file to local file.
             fileItem.write(file);
 
-            uploadedFileName = prefix + suffix;
+            return FilenameUtils.getName(file.getName());
 
         } catch (Exception e) {
             throw new ServletException(e.getMessage());
         }
-
-        return uploadedFileName;
     }
 
     public Object populateJson(Type t, HttpServletRequest request) throws IOException {
