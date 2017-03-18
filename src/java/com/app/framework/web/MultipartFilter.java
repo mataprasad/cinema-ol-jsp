@@ -122,7 +122,6 @@ public class MultipartFilter implements Filter {
 
             // Parse HttpServletRequest.
             HttpServletRequest parsedRequest = parseRequest(httpRequest);
-            request.setAttribute("parsedRequest", parsedRequest.getParameterMap());
             // Continue with filter chain.
             chain.doFilter(parsedRequest, response);
         } else {

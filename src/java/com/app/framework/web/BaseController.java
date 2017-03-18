@@ -16,8 +16,14 @@ import com.app.bean.db.UserInfo;
 import com.app.db.DbConfigHelper;
 import com.app.util.Constant;
 import com.google.gson.Gson;
+import java.io.File;
 import java.util.Collection;
 import java.util.Map;
+import java.util.UUID;
+import javax.servlet.ServletContext;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.io.FilenameUtils;
 
 public class BaseController extends HttpServlet {
 
@@ -38,6 +44,51 @@ public class BaseController extends HttpServlet {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    public String uploadFile(HttpServletRequest request, String postedFileFieldName) throws ServletException {
+
+        String uploadedFileName = "";
+        // Validate file.
+        Object fileObject = request.getAttribute(postedFileFieldName);
+        if (fileObject == null) {
+            throw new ServletException("No file to upload");
+        } else if (fileObject instanceof FileUploadException) {
+            // File upload is failed.
+            FileUploadException fileUploadException = (FileUploadException) fileObject;
+            throw new ServletException(fileUploadException.getMessage());
+        }
+
+        FileItem fileItem = (FileItem) fileObject;
+        if (fileItem == null) {
+            throw new ServletException("No file to upload");
+        }
+
+        ServletContext servletContext = request.getServletContext();
+
+        // Get file name from uploaded file and trim path from it.
+        // Some browsers (e.g. IE, Opera) also sends the path, which is completely irrelevant.
+        String fileName = FilenameUtils.getName(fileItem.getName());
+        // Prepare filename prefix and suffix for an unique filename in upload folder.
+        File uploadFolder = new File(servletContext.getRealPath("/uploads/").toLowerCase());
+        String ext = FilenameUtils.getExtension(fileName).toLowerCase();
+        String prefix = FilenameUtils.getBaseName(UUID.randomUUID().toString().toLowerCase());
+        String suffix = "." + ext;
+
+        try {
+            // Prepare unique local file based on file name of uploaded file.
+            File file = File.createTempFile(prefix, suffix, uploadFolder);
+
+            // Write uploaded file to local file.
+            fileItem.write(file);
+
+            uploadedFileName = prefix + suffix;
+
+        } catch (Exception e) {
+            throw new ServletException(e.getMessage());
+        }
+
+        return uploadedFileName;
     }
 
     public Object populateJson(Type t, HttpServletRequest request) throws IOException {
