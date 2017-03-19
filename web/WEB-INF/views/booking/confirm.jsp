@@ -18,6 +18,10 @@
     </jsp:attribute>
     <jsp:body>
         <form action="<c:url value="/user?do=tix-book-tkt"/>" method="post">
+            <input type="hidden" name="chkSheats" value="${ticketData.getChkSheats()}" />
+            <input type="hidden" name="showId" value="${ticketData.getShow_Id()}" />
+            <input type="hidden" name="totalCost" value="${ticketData.getTotalCost()}" />
+            <input type="hidden" name="totalCount" value="${ticketData.getSheats().size()}" />
             <div style="border: 1px solid #333333; padding: 0px; margin: 5px auto 0px auto;">
                 <div style="border-style: none none solid none; border-width: 1px; border-color: #333333; height: 30px; background-color: #6600CC;">
                     <a style="font-size: 15pt; color: White; display: block; vertical-align: middle; line-height: 30px; text-align: justify; margin-left: 7px;">CONFIRM YOUR SELECTION --</a>
@@ -54,7 +58,7 @@
                         <tr>
                             <td align="left" class="style2" style="background-color: #FF9900">Hall No :</td>
                             <td align="left" style="background-color: #FF9900; color: white; font-weight: bold;">
-                                @Model.Hall_No
+                                ${ticketData.getHall_No()}
                             </td>
                             <td align="left" style="background-color: #FF9900">&nbsp;</td>
                         </tr>
@@ -72,17 +76,17 @@
                             <td align="center" style="background-color: #FF9900">Cost</td>
                             <td align="center" style="background-color: #FF9900">&nbsp;</td>
                         </tr>
-                        <t:_bookingDetail></t:_bookingDetail>
-                            <tr>
-                                <td align="left" class="style2" style="background-color: #FF9900">&nbsp;</td>
-                                <td align="left" style="background-color: #FF9900">&nbsp;</td>
-                                <td align="left" style="background-color: #FF9900">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td align="left" class="style2" style="background-color: #FF9900">&nbsp;</td>
-                                <td align="left" style="background-color: #FF9900">
+                        ${ticketData.getSheatsLayout()}
+                        <tr>
+                            <td align="left" class="style2" style="background-color: #FF9900">&nbsp;</td>
+                            <td align="left" style="background-color: #FF9900">&nbsp;</td>
+                            <td align="left" style="background-color: #FF9900">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td align="left" class="style2" style="background-color: #FF9900">&nbsp;</td>
+                            <td align="left" style="background-color: #FF9900">
 
-                                    <input type="image" style="width:100px; height:30px;" src="<c:url value="images/appImages/btnConfirm.png"/>"/>
+                                <input type="image" style="width:100px; height:30px;" src="<c:url value="images/appImages/btnConfirm.png"/>"/>
                             </td>
                             <td align="left" style="background-color: #FF9900"></td>
                         </tr>
@@ -90,11 +94,6 @@
 
                 </div>
             </div>
-            <input type="hidden" name="SelectedSheats" value="@ViewBag.SelectedSheats" />
-            <input type="hidden" name="ShowId" value="@ViewBag.ShowId" />
-            <input type="hidden" name="totalCost" value="@ViewBag.totalCost" />
-            <input type="hidden" name="totalCount" value="@ViewBag.totalCount" />
-
             <br />
             <br />
         </form>

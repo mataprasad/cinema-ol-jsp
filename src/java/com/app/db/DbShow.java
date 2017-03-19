@@ -1,5 +1,6 @@
 package com.app.db;
 
+import com.app.bean.db.ShowDetail;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,9 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.app.bean.json.SelectListItem;
 import com.app.bean.vm.VMManageShow;
+import com.app.bean.vm.VMRegister;
 import com.app.bean.vm.VMSelectShowPost;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 public class DbShow {
@@ -96,6 +99,26 @@ public class DbShow {
         }
     }
 
+    public ShowDetail getShowDetail(int showId) throws Exception {
+        try {
+            String sql = "select s.Show_Id,convert(varchar,s.Show_Date,103) AS Show_Date, "
+                    + "s.Show_StartTime,s.Movie_Name,(select h.Hall_No from HallInfo h "
+                    + "where Hall_Id=s.Hall_No) As Hall_No  from ShowInfo s where s.Show_Id=?";
+
+            DataSource dataSource = new com.app.db.DataSource(this.dbConfig).getBds();
+
+            QueryRunner run = new QueryRunner(dataSource, true);
+
+            ResultSetHandler<ShowDetail> h = new BeanHandler<ShowDetail>(ShowDetail.class);
+
+            ShowDetail data = run.query(sql, h, showId);
+
+            return data;
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
     public int getShowId(VMSelectShowPost obj) throws Exception {
         try {
             String sql = "select Show_Id from ShowInfo "
@@ -145,4 +168,58 @@ public class DbShow {
             throw ex;
         }
     }
+
+    public long addTicketInfo(int userId, int sheatsCount, String showDate, String showTime, String showId, String totalCost, String bookingDate)
+            throws Exception {
+        try {
+            String sql = ""
+                    + "INSERT INTO TicketInfo "
+                    + "(Ticket_No,User_Id,Show_Date,Show_Time,Show_Id,Ticket_Amount,IsPaid,Sheats_Count,Booking_Date) "
+                    + "VALUES(?,?,?,?,?,?,'False',?,?); ";
+
+            DataSource dataSource = new com.app.db.DataSource(this.dbConfig).getBds();
+
+            QueryRunner run = new QueryRunner(dataSource, true);
+
+            ResultSetHandler<String> h = new ScalarHandler<String>("col");
+
+            String tNo = run.query("SELECT CAST(isnull(max(Ticket_no),0)+1 AS VARCHAR) as col from TicketInfo ", h);
+
+            run.update(sql,
+                    tNo,
+                    userId,
+                    showDate,
+                    showTime,
+                    showId,
+                    totalCost,
+                    sheatsCount,
+                    bookingDate
+            );
+
+            String tId = run.query("SELECT cast(ident_current('TicketInfo') as varchar) as col", h);
+            return Long.parseLong(tId);
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    public boolean addTicketDetial(int showId, int ticketId, List<SelectListItem> selectSheats) throws Exception {
+        try {
+            String sql = "";
+            for (SelectListItem item : selectSheats) {
+                sql += "INSERT INTO TicketDetail (Ticket_id,Sheat_No,Sheat_Cost,Show_Id) VALUES ('" + ticketId + "','" + item.getText() + "','" + item.getValue() + "','" + showId + "');";
+            }
+
+            DataSource dataSource = new com.app.db.DataSource(this.dbConfig).getBds();
+
+            QueryRunner run = new QueryRunner(dataSource, true);
+
+            int result = run.update(sql);
+
+            return result > 0;
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
 }

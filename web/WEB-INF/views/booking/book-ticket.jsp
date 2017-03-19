@@ -130,7 +130,7 @@
                                 <td class="style3" align="center">&nbsp;</td>
                                 <td align="center">&nbsp;</td>
                                 <td align="right"><a id="btnPrint"
-                                                     href='javascript:mypopup("<c:url value="/user?do=booking-detail&id="/>${Ticket_Id}");'
+                                                     href='javascript:mypopup("<c:url value="/user?do=booking-detail&print=1&id="/>${ticketData.getTicket_Id()}");'
                                     style="display: block; width: 100px; height: 25px; line-height: 25px; vertical-align: middle; text-align: center; background-color: #6600CC; color: #FFFFFF; font-weight: bold;">PRINT</a></td>
                         </tr>
                     </table>

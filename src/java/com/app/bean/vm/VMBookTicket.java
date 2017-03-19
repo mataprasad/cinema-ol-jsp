@@ -12,6 +12,10 @@ public class VMBookTicket {
     private String Show_Time = "";
     private String Movie_Name = "";
     private String Ticket_Id = "";
+    private String Hall_No = "";
+    private String Show_Id = "";
+    private String chkSheats = "";
+    private String SheatsLayout = "";
     private List<SelectListItem> Sheats = new ArrayList<SelectListItem>();
 
     public String getTicket_No() {
@@ -78,5 +82,37 @@ public class VMBookTicket {
             }
         }
         return totalCost;
+    }
+
+    public String getHall_No() {
+        return Hall_No;
+    }
+
+    public void setHall_No(String Hall_No) {
+        this.Hall_No = Hall_No;
+    }
+
+    public String getShow_Id() {
+        return Show_Id;
+    }
+
+    public void setShow_Id(String Show_Id) {
+        this.Show_Id = Show_Id;
+    }
+
+    public String getChkSheats() {
+        return chkSheats;
+    }
+
+    public void setChkSheats(String chkSheats) {
+        this.chkSheats = chkSheats;
+    }
+
+    public String getSheatsLayout() {
+        return SheatsLayout;
+    }
+
+    public void setSheatsLayout(String SheatsLayout) {
+        this.SheatsLayout = SheatsLayout;
     }
 }

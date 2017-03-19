@@ -417,7 +417,7 @@
                 </div>
             </div>
             <input type="hidden" name="chkSheats" id="chkSheats" value="" />
-            <input type="hidden" name="ShowId" id="ShowId" value="${hdShowId}" />
+            <input type="hidden" name="showId" id="showId" value="${showId}" />
         </form>
     </jsp:body>
 </t:_layout>

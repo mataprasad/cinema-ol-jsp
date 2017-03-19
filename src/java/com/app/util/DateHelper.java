@@ -26,4 +26,8 @@ public class DateHelper {
         }
         return dateString;
     }
+
+    public static String DbNow() {
+        return DateTime.now().toString(DateTimeFormat.forPattern(Constant.DB_DATE_FORMAT));
+    }
 }
