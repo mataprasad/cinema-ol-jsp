@@ -114,16 +114,6 @@ public class PublicController extends BaseController {
         String action = this.getAction(request);
 
         switch (action) {
-            case "make-show-selection":
-                VMSelectShowPost obj = new VMSelectShowPost();
-                this.populate(obj, request);
-                this.json(obj, request, response);
-                try {
-                    // this.fillDateList(obj, request, response);
-                } catch (Exception e) {
-                    this.json(e, request, response);
-                }
-                break;
             case "login":
                 this.login(request, response, false);
                 break;
@@ -192,7 +182,7 @@ public class PublicController extends BaseController {
                 obj = new UserInfo();
                 obj.setUser_LoginName(userName);
                 obj.setUser_LoginPassword(newPass);
-                
+
                 if (userService.changePassword(obj, true)) {
                     request.setAttribute(Constant.TempDataKeys.MSG, "Password change successfully.");
                     request.setAttribute(Constant.TempDataKeys.STEP, "3");

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.app.bean.json.SelectListItem;
 import com.app.bean.vm.VMManageShow;
+import com.app.bean.vm.VMSelectShowPost;
 import com.app.db.DbConfigHelper;
 import com.app.db.DbShow;
 
@@ -29,5 +30,13 @@ public class ShowService {
 
     public boolean addShowInfo(VMManageShow obj) throws Exception {
         return this.dbShow.addShowInfo(obj);
+    }
+
+    public int getShowId(VMSelectShowPost obj) throws Exception {
+        return this.dbShow.getShowId(obj);
+    }
+
+    public List<SelectListItem> getShowSeats(int show_id) throws Exception {
+        return this.dbShow.getShowSeats(show_id);
     }
 }

@@ -11,7 +11,7 @@ if(runningMovies==null){
 }
 %>
 
-<form action="<c:url value="/public?do=make-show-selection"/>" method="post" onsubmit="return fn_ValidateForm();">
+<form action="<c:url value="/user?do=tix-make-show-selection"/>" method="post" onsubmit="return fn_ValidateForm();">
     <div align="center" style="width: 250px">
         <br />
         <table class="style1">

@@ -11,7 +11,6 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.app.bean.db.MovieInfo;
 import com.app.bean.json.SelectListItem;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 public class DbMovie {
 
