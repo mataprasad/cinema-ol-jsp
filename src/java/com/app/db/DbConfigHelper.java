@@ -4,97 +4,92 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DbConfigHelper {
-	private String host;
-	private String port;
-	private String dbName;
-	private String userId;
-	private String dbType;
-	private String password;
-	private String driver;
 
-	public DbConfigHelper(String driver, String host, String port, String dbName, String userId, String password,
-			String dbType) {
+    private String host;
+    private String port;
+    private String dbName;
+    private String userId;
+    private String dbType;
+    private String password;
+    private String driver;
 
-		this.driver = driver;
-		this.host = host;
-		this.port = port;
-		this.dbName = dbName;
-		this.userId = userId;
-		this.password = password;
-		this.dbType = dbType.trim().toUpperCase();
-	}
+    public DbConfigHelper(String driver, String host, String port, String dbName, String userId, String password,
+            String dbType) {
 
-	public String getHost() {
-		return host;
-	}
+        this.driver = driver;
+        this.host = host;
+        this.port = port;
+        this.dbName = dbName;
+        this.userId = userId;
+        this.password = password;
+        this.dbType = dbType.trim().toUpperCase();
+    }
 
-	public void setHost(String host) {
-		this.host = host;
-	}
+    public String getHost() {
+        return host;
+    }
 
-	public String getPort() {
-		return port;
-	}
+    public void setHost(String host) {
+        this.host = host;
+    }
 
-	public void setPort(String port) {
-		this.port = port;
-	}
+    public String getPort() {
+        return port;
+    }
 
-	public String getDbName() {
-		return dbName;
-	}
+    public void setPort(String port) {
+        this.port = port;
+    }
 
-	public void setDbName(String dbName) {
-		this.dbName = dbName;
-	}
+    public String getDbName() {
+        return dbName;
+    }
 
-	public String getDriver() {
-		return driver;
-	}
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
 
-	public void setDriver(String driver) {
-		this.driver = driver;
-	}
+    public String getDriver() {
+        return driver;
+    }
 
-	public String getUserId() {
-		return userId;
-	}
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public String getDbUrl() {
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-		String url = "jdbc:mysql://" + this.host + ":" + this.port + "/" + this.dbName;
-		switch (this.dbType) {
-		case "MYSQL":
-			break;
-		case "SQL":
-			url = "jdbc:sqlserver://" + this.host + ":" + this.port + ";" + this.dbName;
-			break;
-		default:
-			break;
-		}
-		return url;
-	}
+    public String getDbUrl() {
 
-	public Connection getConnection() {
-		Connection con = null;
-		try {
-			Class.forName(this.driver);
-			con = DriverManager.getConnection(getDbUrl(), this.userId, this.password);
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		return con;
-	}
+        String url = "jdbc:mysql://" + this.host + ":" + this.port + "/" + this.dbName;
+        switch (this.dbType) {
+            case "MYSQL":
+                break;
+            case "SQL":
+                url = "jdbc:sqlserver://" + this.host + ":" + this.port + ";" + this.dbName;
+                break;
+            default:
+                break;
+        }
+        return url;
+    }
+
+    public Connection getConnection() throws Exception {
+        Class.forName(this.driver);
+        return DriverManager.getConnection(getDbUrl(), this.userId, this.password);
+    }
 }

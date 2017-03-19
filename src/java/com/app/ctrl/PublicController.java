@@ -10,7 +10,6 @@ import com.app.bean.db.UserInfo;
 import com.app.bean.vm.VMContactForm;
 import com.app.bean.vm.VMLogin;
 import com.app.bean.vm.VMRegister;
-import com.app.bean.vm.VMSelectShowPost;
 import com.app.biz.CommonService;
 import com.app.biz.MovieService;
 import com.app.biz.UserService;
@@ -42,8 +41,8 @@ public class PublicController extends BaseController {
                 try {
                     request.setAttribute(Constant.TempDataKeys.RUNNING_MOVIES, movieService.fillMovieList());
                     request.setAttribute(Constant.TempDataKeys.MOVIES_URLS, movieService.getMoviesImageURL());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception ex) {
+                    throw new ServletException(ex.getMessage());
                 }
                 this.view("public/index.jsp", request, response);
                 break;
@@ -71,8 +70,8 @@ public class PublicController extends BaseController {
                 CommonService commonService = new CommonService(this._dbConfig);
                 try {
                     request.setAttribute(Constant.TempDataKeys.STATE_LIST, commonService.getAllStates());
-                } catch (Exception e) {
-                    this.json(e, request, response);
+                } catch (Exception ex) {
+                    throw new ServletException(ex.getMessage());
                 }
                 this.view("public/register.jsp", request, response);
                 break;
@@ -84,8 +83,8 @@ public class PublicController extends BaseController {
                 movieService = new MovieService(this._dbConfig);
                 try {
                     request.setAttribute(Constant.TempDataKeys.MOVIE_LIST, movieService.getRunningMovies());
-                } catch (Exception e) {
-                    this.json(e, request, response);
+                } catch (Exception ex) {
+                    throw new ServletException(ex.getMessage());
                 }
                 this.view("public/movie.jsp", request, response);
                 break;
@@ -93,8 +92,8 @@ public class PublicController extends BaseController {
                 movieService = new MovieService(this._dbConfig);
                 try {
                     request.setAttribute(Constant.TempDataKeys.MOVIE_LIST, movieService.getUpCommingMovies());
-                } catch (Exception e) {
-                    this.json(e, request, response);
+                } catch (Exception ex) {
+                    throw new ServletException(ex.getMessage());
                 }
                 this.view("public/movie-up-comming.jsp", request, response);
                 break;
@@ -130,7 +129,7 @@ public class PublicController extends BaseController {
                 try {
                     this.resetPass(request, response);
                 } catch (Exception ex) {
-                    Logger.getLogger(PublicController.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new ServletException(ex.getMessage());
                 }
                 this.view("public/reset-pass.jsp", request, response);
             }
@@ -219,8 +218,8 @@ public class PublicController extends BaseController {
                 UserInfo dataTable = userService.doUserLogin(objVMLogin, false);
                 this.loginSuccessRedirect(request, response, dataTable, false);
             }
-        } catch (Exception e) {
-            request.setAttribute(Constant.TempDataKeys.ERROR_MSG, e.getMessage());
+        } catch (Exception ex) {
+            throw new ServletException(ex.getMessage());
         }
         this.registerGet(request, response);
     }
@@ -230,8 +229,8 @@ public class PublicController extends BaseController {
         CommonService commonService = new CommonService(this._dbConfig);
         try {
             request.setAttribute(Constant.TempDataKeys.STATE_LIST, commonService.getAllStates());
-        } catch (Exception e) {
-            request.setAttribute(Constant.TempDataKeys.ERROR_MSG, e.getMessage());
+        } catch (Exception ex) {
+            throw new ServletException(ex.getMessage());
         }
         this.view("public/register.jsp", request, response);
     }
@@ -282,8 +281,8 @@ public class PublicController extends BaseController {
         UserInfo dataTable = null;
         try {
             dataTable = userService.doUserLogin(objVMLogin, isAdmin);
-        } catch (Exception e) {
-            this.json(e, request, response);
+        } catch (Exception ex) {
+            throw new ServletException(ex.getMessage());
         }
         if (dataTable != null) {
             this.loginSuccessRedirect(request, response, dataTable, isAdmin);

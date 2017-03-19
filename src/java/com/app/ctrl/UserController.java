@@ -48,8 +48,8 @@ public class UserController extends BaseController {
                 CommonService commonService = new CommonService(this._dbConfig);
                 try {
                     request.setAttribute(Constant.TempDataKeys.STATE_LIST, commonService.getAllStates());
-                } catch (Exception e) {
-                    this.json(e, request, response);
+                } catch (Exception ex) {
+                    throw new ServletException(ex.getMessage());
                 }
                 this.view("user/edit.jsp", request, response);
                 break;
@@ -69,8 +69,7 @@ public class UserController extends BaseController {
                         request.setAttribute("printOnLoad", "true");
                     }
                 } catch (Exception ex) {
-                    //Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                    this.json(ex, request, response);
+                    throw new ServletException(ex.getMessage());
                 }
                 this.view("user/booking-detail.jsp", request, response);
                 break;
@@ -112,8 +111,8 @@ public class UserController extends BaseController {
                         request.setAttribute("output", output);
                         request.setAttribute("showId", idX);
                     }
-                } catch (Exception e) {
-                    this.json(e, request, response);
+                } catch (Exception ex) {
+                    throw new ServletException(ex.getMessage());
                 }
                 this.view("booking/select-sheats.jsp", request, response);
                 break;
@@ -129,7 +128,7 @@ public class UserController extends BaseController {
                     try {
                         dataTable1 = showService.getShowDetail(Integer.parseInt(sheatSelection.getShowId()));
                     } catch (Exception ex) {
-                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new ServletException(ex.getMessage());
                     }
                 }
 
@@ -169,7 +168,7 @@ public class UserController extends BaseController {
                     try {
                         dataTable1 = showService.getShowDetail(Integer.parseInt(sheatSelection.getShowId()));
                     } catch (Exception ex) {
-                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new ServletException(ex.getMessage());
                     }
                 }
 
@@ -193,7 +192,7 @@ public class UserController extends BaseController {
                         request.setAttribute(Constant.TempDataKeys.TICKET_DATA, objVMBookTicke2);
                         this.view("booking/book-ticket.jsp", request, response);
                     } catch (Exception ex) {
-                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new ServletException(ex.getMessage());
                     }
                 }
                 break;
@@ -218,13 +217,13 @@ public class UserController extends BaseController {
                         CommonService commonService = new CommonService(this._dbConfig);
                         try {
                             request.setAttribute(Constant.TempDataKeys.STATE_LIST, commonService.getAllStates());
-                        } catch (Exception e) {
-                            this.json(e, request, response);
+                        } catch (Exception ex) {
+                            throw new ServletException(ex.getMessage());
                         }
 
                     }
                 } catch (Exception ex) {
-                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new ServletException(ex.getMessage());
                 }
 
                 this.view("user/edit.jsp", request, response);
@@ -247,9 +246,7 @@ public class UserController extends BaseController {
                                 request.setAttribute(Constant.TempDataKeys.MSG, "Oops some problems occured !");
                             }
                         } catch (Exception ex) {
-                            //Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                            this.json(ex, request, response);
-                            return;
+                            throw new ServletException(ex.getMessage());
                         }
 
                     } else {
@@ -311,12 +308,9 @@ public class UserController extends BaseController {
                         this.view("user/history.jsp", request, response);
                     }
                 }
-            } catch (Exception e) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                this.json(e.getMessage(), request, response);
+            } catch (Exception ex) {
+                throw new ServletException(ex.getMessage());
             }
-        } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 }

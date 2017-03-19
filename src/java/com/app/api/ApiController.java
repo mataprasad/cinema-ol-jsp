@@ -12,55 +12,56 @@ import com.app.framework.web.BaseController;
 
 @WebServlet("/api")
 public class ApiController extends BaseController {
-	private static final long serialVersionUID = 1L;
 
-	public ApiController() {
-		super();
-	}
+    private static final long serialVersionUID = 1L;
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    public ApiController() {
+        super();
+    }
 
-		this._dbConfig = this.InitDbConfig();
-		String action = this.getAction(request);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		VMSelectShow obj = null;
+        this._dbConfig = this.InitDbConfig();
+        String action = this.getAction(request);
 
-		switch (action) {
-		case "fill-date-list":
-			try {
-				obj = (VMSelectShow) this.populateJson(VMSelectShow.class, request);
-				this.fillDateList(obj, request, response);
-			} catch (Exception e) {
+        VMSelectShow obj = null;
 
-				e.printStackTrace();
-			}
-			break;
-		case "fill-time-list":
-			try {
-				obj = (VMSelectShow) this.populateJson(VMSelectShow.class, request);
-				this.fillTimeList(obj, request, response);
-			} catch (Exception e) {
+        switch (action) {
+            case "fill-date-list":
+                try {
+                    obj = (VMSelectShow) this.populateJson(VMSelectShow.class, request);
+                    this.fillDateList(obj, request, response);
+                } catch (Exception e) {
 
-				e.printStackTrace();
-			}
-			break;
-		default:
-			break;
-		}
-	}
+                    throw new ServletException(e.getMessage());
+                }
+                break;
+            case "fill-time-list":
+                try {
+                    obj = (VMSelectShow) this.populateJson(VMSelectShow.class, request);
+                    this.fillTimeList(obj, request, response);
+                } catch (Exception e) {
 
-	private void fillDateList(VMSelectShow obj, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, Exception {
+                    throw new ServletException(e.getMessage());
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
-		ShowService service = new ShowService(this._dbConfig);
-		this.json(service.fillDateList(obj.getpMovieTitle()), request, response);
-	}
+    private void fillDateList(VMSelectShow obj, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, Exception {
 
-	private void fillTimeList(VMSelectShow obj, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, Exception {
+        ShowService service = new ShowService(this._dbConfig);
+        this.json(service.fillDateList(obj.getpMovieTitle()), request, response);
+    }
 
-		ShowService service = new ShowService(this._dbConfig);
-		this.json(service.fillTimeList(obj.getpMovieTitle(), obj.getpMovieDate()), request, response);
-	}
+    private void fillTimeList(VMSelectShow obj, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, Exception {
+
+        ShowService service = new ShowService(this._dbConfig);
+        this.json(service.fillTimeList(obj.getpMovieTitle(), obj.getpMovieDate()), request, response);
+    }
 }

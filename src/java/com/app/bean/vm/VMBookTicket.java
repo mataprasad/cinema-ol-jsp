@@ -27,7 +27,7 @@ public class VMBookTicket {
     }
 
     public String getBooking_Date() {
-        return DateHelper.ToDD_MMM_YYYY(this.Booking_Date);
+        return DateHelper.ToDD_MMM_YYYY(DateHelper.FromDD_MM_YYYY(this.Booking_Date));
     }
 
     public void setBooking_Date(String Booking_Date) {
@@ -35,7 +35,7 @@ public class VMBookTicket {
     }
 
     public String getShow_Date() {
-        return DateHelper.ToDD_MMM_YYYY(this.Show_Date);
+        return DateHelper.ToDD_MMM_YYYY(DateHelper.FromDD_MM_YYYY(this.Show_Date));
     }
 
     public void setShow_Date(String Show_Date) {

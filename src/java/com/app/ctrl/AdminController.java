@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.app.framework.web.BaseController;
 import com.app.util.Constant;
 import com.google.gson.Gson;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +49,7 @@ public class AdminController extends BaseController {
                     try {
                         request.setAttribute(Constant.TempDataKeys.MOVIE_LIST, movieService.getMoviesToRemove());
                     } catch (Exception ex) {
-                        Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new ServletException(ex.getMessage());
                     }
                 }
                 this.view("admin/remove-movie.jsp", request, response);
@@ -81,7 +82,7 @@ public class AdminController extends BaseController {
                         }
                         request.setAttribute(Constant.TempDataKeys.MOVIE_LIST, movieService.getMoviesToRemove());
                     } catch (Exception ex) {
-                        Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new ServletException(ex.getMessage());
                     }
                 }
                 this.view("admin/remove-movie.jsp", request, response);
@@ -107,7 +108,7 @@ public class AdminController extends BaseController {
                             request.setAttribute(Constant.TempDataKeys.MSG, "Oops there is issue while processing.");
                         }
                     } catch (Exception ex) {
-                        Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new ServletException(ex.getMessage());
                     }
                 }
                 addMovieGet(request, response);
@@ -124,7 +125,7 @@ public class AdminController extends BaseController {
                             request.setAttribute(Constant.TempDataKeys.MSG, "Oops there is issue while processing.");
                         }
                     } catch (Exception ex) {
-                        Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new ServletException(ex.getMessage());
                     }
                 }
                 this.manageMovieGet(request, response);
@@ -151,7 +152,7 @@ public class AdminController extends BaseController {
             request.setAttribute(Constant.TempDataKeys.DDL_TIME_LIST, ddlTimeList);
             request.setAttribute(Constant.TempDataKeys.DDL_MOVIE_LIST, ddlMovieList);
         } catch (Exception ex) {
-            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServletException(ex.getMessage());
         }
 
         this.view("admin/manage-show.jsp", request, response);
@@ -174,7 +175,7 @@ public class AdminController extends BaseController {
             request.setAttribute(Constant.TempDataKeys.DDL_LANGUAGE_LIST, ddlLanguage);
             request.setAttribute(Constant.TempDataKeys.DDL_INDUSTRY_LIST, ddlIndustry);
         } catch (Exception ex) {
-            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServletException(ex.getMessage());
         }
 
         this.view("admin/add-movie.jsp", request, response);

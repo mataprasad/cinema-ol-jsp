@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -36,13 +38,11 @@ public class BaseController extends HttpServlet {
         super();
     }
 
-    public void populate(Object obj, HttpServletRequest request) {
+    public void populate(Object obj, HttpServletRequest request) throws ServletException {
         try {
             BeanUtils.populate(obj, request.getParameterMap());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            throw new ServletException(ex.getMessage());
         }
     }
 
@@ -78,7 +78,7 @@ public class BaseController extends HttpServlet {
 
         try {
             // Prepare unique local file based on file name of uploaded file.
-            
+
             File file = File.createTempFile(prefix, suffix, uploadFolder);
             // Write uploaded file to local file.
             fileItem.write(file);

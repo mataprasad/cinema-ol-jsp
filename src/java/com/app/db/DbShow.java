@@ -12,7 +12,6 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.app.bean.json.SelectListItem;
 import com.app.bean.vm.VMManageShow;
-import com.app.bean.vm.VMRegister;
 import com.app.bean.vm.VMSelectShowPost;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
