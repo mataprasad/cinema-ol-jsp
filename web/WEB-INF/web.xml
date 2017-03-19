@@ -34,7 +34,7 @@
     <context-param>
         <description>Db DatabaseName</description>
         <param-name>db-name</param-name>
-        <param-value>databaseName=DbScottServer</param-value>
+        <param-value>databaseName=DbCinemaOl</param-value>
     </context-param>
     <context-param>
         <description>Location to store uploaded file</description>
