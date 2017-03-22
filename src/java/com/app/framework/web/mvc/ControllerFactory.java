@@ -25,16 +25,20 @@ public class ControllerFactory implements Filter {
         String s1 = req.getContextPath();
         String s2 = req.getRequestURI();
         String s3 = req.getRequestURL().toString();
-        String s4 = getFullURL(req);
+        String fullUrl = getFullURL(req).toLowerCase();
+        if (fullUrl.contains(".css") || fullUrl.contains(".js") || fullUrl.contains(".html") || fullUrl.contains(".jpg") || fullUrl.contains(".png") || fullUrl.contains(".gif") || fullUrl.contains(".icon")) {
+            chain.doFilter(request, response);
+        } else {
 
-        String method = req.getMethod();
+            String method = req.getMethod();
 
-        String requestedResource = s2.replace(s1 + "/", "");
-        String[] urlParts = requestedResource.split("/");
-        String controller = urlParts[0] + "Controller";
-        String action = urlParts[1];       
-        
-        ActionInvoker.invoke(request, response);
+            String requestedResource = s2.replace(s1 + "/", "");
+            String[] urlParts = requestedResource.split("/");
+            String controller = urlParts[0] + "Controller";
+            String action = urlParts[1];
+
+            ActionInvoker.invoke(request, response);
+        }
 
     }
 

@@ -12,7 +12,7 @@ import javax.servlet.ServletResponse;
 
 public class ActionMap {
 
-    private List<ActionMapController> controllers = new ArrayList<ActionMapController>();
+    private List<ControllerInfo> controllers = new ArrayList<ControllerInfo>();
     private String defaultClass = "";
     private String defaultMethod = "";
 

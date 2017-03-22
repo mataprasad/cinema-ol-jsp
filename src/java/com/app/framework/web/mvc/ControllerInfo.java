@@ -9,8 +9,8 @@ package com.app.framework.web.mvc;
  *
  * @author CHAUHAN
  */
-public class ActionMapAction {
-    
-    private String urlName="";
-    private String methodName="";
+public class ControllerInfo {
+
+    private String urlName = "";
+    private String className = "";
 }
