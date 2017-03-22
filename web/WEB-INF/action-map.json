@@ -1,0 +1,44 @@
+{
+    "user": {
+        "controllerClassName": "com.app.ctrl.UserController",
+        "actions": {
+            "index": {
+                "POST": {
+                    "methodName": "postIndex",
+                    "modelClassName": "java.lang.String[]",
+                    "allowedRoles": [
+                        "*"
+                    ]
+                },
+                "GET": {
+                    "methodName": "getIndex",
+                    "modelClassName": "java.lang.String",
+                    "allowedRoles": [
+                        "*"
+                    ]
+                }
+            }
+        }
+    },
+    "home": {
+        "controllerClassName": "com.app.ctrl.HomeController",
+        "actions": {
+            "index": {
+                "POST": {
+                    "methodName": "postIndex",
+                    "modelClassName": "java.lang.String[]",
+                    "allowedRoles": [
+                        "*"
+                    ]
+                },
+                "GET": {
+                    "methodName": "getIndex",
+                    "modelClassName": "java.lang.String",
+                    "allowedRoles": [
+                        "*"
+                    ]
+                }
+            }
+        }
+    }
+}
