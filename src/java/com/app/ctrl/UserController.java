@@ -197,7 +197,9 @@ public class UserController extends BaseController {
                 }
                 break;
             case "edit":
-                UserInfo objUserInfo = ModelBinder.populateUserInfo(request);
+                //UserInfo objUserInfo = ModelBinder.populateUserInfo(request);
+                UserInfo objUserInfo = new UserInfo();
+                this.populate(objUserInfo, request);
                 UserInfo loggedUserInSession = this.getLoggedUser(request);
                 objUserInfo.setUser_LoginName(loggedUserInSession.getUser_LoginName());
                 objUserInfo.setUser_LoginPassword(loggedUserInSession.getUser_LoginPassword());

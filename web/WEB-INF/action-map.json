@@ -2,10 +2,10 @@
     "user": {
         "controllerClassName": "com.app.ctrl.UserController",
         "actions": {
-            "index": {
+            "edit": {
                 "POST": {
-                    "methodName": "postIndex",
-                    "modelClassName": "java.lang.String[]",
+                    "methodName": "edit",
+                    "modelClassName": "com.app.bean.db.UserInfo",
                     "allowedRoles": [
                         "*"
                     ]
@@ -27,6 +27,22 @@
                 "POST": {
                     "methodName": "postIndex",
                     "modelClassName": "java.lang.String[]",
+                    "allowedRoles": [
+                        "*"
+                    ]
+                },
+                "GET": {
+                    "methodName": "index",
+                    "modelClassName": "java.lang.String",
+                    "allowedRoles": [
+                        "*"
+                    ]
+                }
+            },
+            "edit": {
+                "POST": {
+                    "methodName": "edit",
+                    "modelClassName": "com.app.bean.db.UserInfo",
                     "allowedRoles": [
                         "*"
                     ]

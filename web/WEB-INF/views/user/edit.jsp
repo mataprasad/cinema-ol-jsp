@@ -91,21 +91,21 @@
                         <tr>
                             <td class="style4">First Name </td>
                             <td class="style5">
-                                <input type="text" id="User_FName" name="User_FName" value="${userInfo.getUser_FName() }" />
+                                <input type="text" id="User_FName" name="user_FName" value="${userInfo.getUser_FName() }" />
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td class="style4">Last Name </td>
                             <td class="style5">
-                                <input type="text" id="User_LName" name="User_LName" value="${userInfo.getUser_LName() }" />
+                                <input type="text" id="User_LName" name="user_LName" value="${userInfo.getUser_LName() }" />
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td class="style4">Email </td>
                             <td class="style5">
-                                <input type="text" id="User_Email" name="User_Email" value="${userInfo.getUser_Email() }" />
+                                <input type="text" id="User_Email" name="user_Email" value="${userInfo.getUser_Email() }" />
                             </td>
                             <td></td>
                         </tr>
@@ -113,21 +113,21 @@
                             <td class="style4">Mobile No. </td>
                             <td class="style5">
 										
-										<input type="text" id="User_MobileNo" name="User_MobileNo" value="${userInfo.getUser_MobileNo() }" />
+										<input type="text" id="User_MobileNo" name="user_MobileNo" value="${userInfo.getUser_MobileNo() }" />
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td class="style4">Address1</td>
                             <td class="style5">
-                                <input type="text" id="User_Add" name="User_Add" value="${userInfo.getUser_Add() }" />
+                                <input type="text" id="User_Add" name="user_Add" value="${userInfo.getUser_Add() }" />
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td class="style4">City </td>
                             <td class="style5">
-                                <input type="text" id="User_City" name="User_City" value="${userInfo.getUser_City() }" />
+                                <input type="text" id="User_City" name="user_City" value="${userInfo.getUser_City() }" />
                             </td>
                             <td></td>
                         </tr>
@@ -135,21 +135,21 @@
                             <td class="style4">State </td>
                             <td class="style5">
                                
-                            <t:_stateDropdown ddlValue="${userInfo.getUser_State() }" dropdownId="User_State" onchangeEvent=" "></t:_stateDropdown>
+                            <t:_stateDropdown ddlValue="${userInfo.getUser_State() }" dropdownId="user_State" onchangeEvent=" "></t:_stateDropdown>
 									</td>
                             <td>&nbsp;</td>
                         </tr>
                         <tr>
                             <td class="style4">Security Question </td>
                             <td class="style5">
-                                <input type="text" id="User_SQ" name="User_SQ" value="${userInfo.getUser_SQ() }" />
+                                <input type="text" id="User_SQ" name="user_SQ" value="${userInfo.getUser_SQ() }" />
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td class="style4">Security Answer </td>
                             <td class="style5">
-                                <input type="text" id="User_SA" name="User_SA" value="${userInfo.getUser_SA() }" />
+                                <input type="text" id="User_SA" name="user_SA" value="${userInfo.getUser_SA() }" />
                             </td>
                             <td></td>
                         </tr>
@@ -181,7 +181,7 @@
         <div
 					style="border-style: none none solid none; border-color: #CCCCCC; padding: 0px; margin: 0px; width: 200px; height: 40px; float: left; border-bottom-width: 1px;"></div>
     </div>
-    <input type="hidden" value="0" id="User_Id" name="User_Id" />
+    <input type="hidden" value="0" id="User_Id" name="user_Id" />
 </form>
 
 </jsp:body>

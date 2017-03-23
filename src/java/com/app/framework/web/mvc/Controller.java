@@ -30,8 +30,9 @@ public class Controller {
         return new ActionResult();
     }
 
-    public void json(Object data) throws IOException {
+    public IActionResult json(Object data) throws IOException {
         response.setContentType(Constant.CONTENT_TYPE_JSON);
         response.getWriter().append(g.toJson(data));
+        return new ActionResult();
     }
 }

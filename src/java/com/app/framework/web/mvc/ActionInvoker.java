@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.beanutils.BeanUtils;
 
 public class ActionInvoker {
 
@@ -16,10 +17,11 @@ public class ActionInvoker {
         ActionMap controllerContext = ActionMap.Init(request, response);
         if (controllerContext == null) {
             success = false;
+            return success;
         }
         String ctrl = controllerContext.getController();
         String act = controllerContext.getAction();
-
+        String mod = controllerContext.getModel();
         try {
             Class<?> t = Class.forName(ctrl);
             Object o = t.newInstance();
@@ -27,8 +29,17 @@ public class ActionInvoker {
             Method initController = t.getMethod("initController", ServletRequest.class, ServletResponse.class);
             initController.invoke(o, request, response);
 
-            Method actionMethod = t.getMethod(act);
-            actionMethod.invoke(o);
+            Method actionMethod = null;
+            if (!"".equals(mod)) {
+                Class<?> mt = Class.forName(mod);
+                actionMethod = t.getMethod(act, mt);
+                Object mo = mt.newInstance();
+                BeanUtils.populate(mo, request.getParameterMap());
+                actionMethod.invoke(o, mo);
+            } else {
+                actionMethod = t.getMethod(act);
+                actionMethod.invoke(o);
+            }
             success = true;
             // production code should handle these exceptions more gracefully
         } catch (ClassNotFoundException x) {
