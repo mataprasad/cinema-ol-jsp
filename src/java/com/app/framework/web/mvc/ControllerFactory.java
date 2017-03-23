@@ -1,9 +1,11 @@
 package com.app.framework.web.mvc;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,7 +83,9 @@ public class ControllerFactory implements Filter {
 
                 String json = FileUtils.readFileToString(new File(jsonFilePath), "utf-8");
 
-                Map<String, ControllerInfo> map = g.fromJson(json, Map.class);
+                Type listType = new TypeToken<Map<String, ControllerInfo>>() {
+                }.getType();
+                Map<String, ControllerInfo> map = g.fromJson(json, listType);
 
                 String method = req.getMethod();
                 if (map.containsKey(controller)) {
