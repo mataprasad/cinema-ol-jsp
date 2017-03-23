@@ -1,5 +1,6 @@
 package com.app.framework.web.mvc;
 
+import java.io.IOException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.lang.reflect.InvocationTargetException;
@@ -10,8 +11,12 @@ import java.util.logging.Logger;
 
 public class ActionInvoker {
 
-    public static void invoke(ServletRequest request, ServletResponse response) {
+    public static boolean invoke(ServletRequest request, ServletResponse response) throws IOException {
+        boolean success = false;
         ActionMap controllerContext = ActionMap.Init(request, response);
+        if (controllerContext == null) {
+            success = false;
+        }
         String ctrl = controllerContext.getController();
         String act = controllerContext.getAction();
 
@@ -24,22 +29,23 @@ public class ActionInvoker {
 
             Method actionMethod = t.getMethod(act);
             actionMethod.invoke(o);
+            success = true;
             // production code should handle these exceptions more gracefully
         } catch (ClassNotFoundException x) {
-            x.printStackTrace();
+            success = false;
         } catch (InstantiationException x) {
-            x.printStackTrace();
+            success = false;
         } catch (IllegalAccessException x) {
-            x.printStackTrace();
+            success = false;
         } catch (NoSuchMethodException ex) {
-            Logger.getLogger(ActionInvoker.class.getName()).log(Level.SEVERE, null, ex);
+            success = false;
         } catch (SecurityException ex) {
-            Logger.getLogger(ActionInvoker.class.getName()).log(Level.SEVERE, null, ex);
+            success = false;
         } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ActionInvoker.class.getName()).log(Level.SEVERE, null, ex);
+            success = false;
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(ActionInvoker.class.getName()).log(Level.SEVERE, null, ex);
+            success = false;
         }
-
+        return success;
     }
 }
